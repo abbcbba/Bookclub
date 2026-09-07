@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>독서모임 기록 2021–2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FFFFFF;--paper2:#F1EFEA;--ink:#1F2226;--soft:#6C6A63;--rule:#E0DDD6;--off:#D8D5CE;
+--en:#A03A34;--ko:#1F4D45;--de:#6B5B95;--fr:#C1902F;--ja:#7D9A4F;--es:#C4603D;--ru:#2F5D8C;--etc:#8A7A69;
+--lit:#1F4D45;--non:#C1902F;--on:#A03A34;
+--s1:#1F4D45;--s2:#4E8C7E;--s3:#2F5D8C;--s4:#7D9A4F;--s5:#C1902F;--s6:#A03A34;--s7:#6B5B95;--s8:#C4603D;--s9:#8A7A69;--s10:#5C6670;}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans KR",system-ui,sans-serif;font-size:15px;line-height:1.7;letter-spacing:-.01em}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
+h1,h2,h3,.num{font-family:"Gowun Batang",Georgia,serif}
+h1{font-size:clamp(30px,7.5vw,52px);font-weight:700;line-height:1.25;letter-spacing:-.02em;margin:0 0 14px}
+h2{font-size:clamp(20px,4.6vw,27px);font-weight:700;line-height:1.4;margin:0 0 6px;letter-spacing:-.02em}
+p{margin:0 0 14px;max-width:62ch}
+.lede{font-size:16px;color:var(--soft)}
+.note{font-size:13px;color:var(--soft);line-height:1.6}
+section{padding-top:52px}.sec-head{margin-bottom:22px}.sec-head p{margin:0;color:var(--soft);font-size:14.5px}
+header{padding:52px 0 0}.kicker{font-family:"Gowun Batang",serif;font-size:15px;color:var(--soft);margin:0 0 18px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--rule);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:28px 0 0}
+.fact{background:var(--paper);padding:16px 4px 18px}
+.fact .num{display:block;font-size:34px;font-weight:700;line-height:1.05}
+.fact .lbl{display:block;font-size:12.5px;color:var(--soft);margin-top:5px;line-height:1.45}
+.shelf-row{margin-bottom:16px}
+.shelf-meta{display:flex;align-items:baseline;gap:9px;margin-bottom:6px;flex-wrap:wrap}
+.shelf-year{font-family:"Gowun Batang",serif;font-size:19px;font-weight:700}
+.shelf-count{font-size:12.5px;color:var(--soft)}
+.spines{display:grid;grid-template-columns:repeat(26,1fr);gap:2px;align-items:end;border-bottom:3px solid var(--ink);min-height:92px}
+.spine{border:0;padding:0;margin:0;width:100%;border-radius:1px 1px 0 0;cursor:pointer;transition:filter .12s,transform .12s;transform-origin:bottom center}
+.spine:hover{filter:brightness(1.22)}
+.spine:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.spine[aria-pressed="true"]{transform:translateY(-7px);filter:brightness(1.3)}
+.modes{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 20px}
+.mode{font-family:inherit;font-size:13px;padding:6px 13px;border:1px solid var(--rule);background:transparent;color:var(--soft);border-radius:999px;cursor:pointer}
+.mode[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.readout{border:1px solid var(--rule);border-top:0;background:var(--paper2);padding:0 16px;overflow:hidden;max-height:0;opacity:0;transition:max-height .28s ease,opacity .2s ease,padding .28s ease}
+.readout.open{max-height:240px;opacity:1;padding:14px 16px 16px}
+.readout .r-date{font-size:12.5px;color:var(--soft)}
+.readout .r-title{font-family:"Gowun Batang",serif;font-size:20px;font-weight:700;line-height:1.35;margin:2px 0 3px}
+.readout .r-author{font-size:14px;color:var(--soft)}
+.readout .r-orig{font-size:12.5px;color:var(--soft);margin-top:4px;font-style:italic}
+.r-tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11.5px;padding:2px 9px;border:1px solid var(--rule);border-radius:999px;color:var(--soft)}
+button.tag{font-family:inherit;background:transparent;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+button.tag:hover{background:#fff;color:var(--ink);border-color:var(--ink)}
+button.tag:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+button.tag.hl:hover{background:#fff;color:var(--on);border-color:var(--on)}
+.tag.hl{border-color:var(--on);color:var(--on)}
+.hint{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+.legend{display:flex;flex-wrap:wrap;gap:5px 6px;margin:0 0 14px}
+.lg{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--soft)}
+button.lg{font-family:inherit;font-size:12px;border:1px solid var(--rule);background:transparent;padding:4px 10px 4px 7px;border-radius:999px;cursor:pointer;transition:background .15s,border-color .15s,opacity .15s}
+button.lg:hover{background:var(--paper2)}
+button.lg:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+button.lg[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);font-weight:500}
+.legend.filtered button.lg[aria-pressed="false"]{opacity:.45}
+.fhint{font-size:12px;color:var(--soft);margin:0 0 12px;min-height:1.2em}
+.sw{width:11px;height:11px;border-radius:2px;flex:none}
+.bars{display:grid;gap:9px}
+.bar-row{display:grid;grid-template-columns:66px 1fr 40px;align-items:center;gap:10px}
+.bar-lbl{font-size:13px;color:var(--soft);text-align:right}
+.bar-track{height:22px;background:var(--paper2)}
+.bar-fill{height:100%;display:block}
+.bar-val{font-family:"Gowun Batang",serif;font-size:15px;font-weight:700}
+.stack{display:flex;height:26px;background:var(--paper2);overflow:hidden}
+.stack span{display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;overflow:hidden;white-space:nowrap}
+.stack-row{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:10px;margin-bottom:8px}
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--off)}.dot.on{background:var(--on)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-size:12px;font-weight:500;color:var(--soft)}
+td.n{font-family:"Gowun Batang",serif;font-weight:700;white-space:nowrap}
+td.d{color:var(--soft);font-size:12.5px;white-space:nowrap;width:44px}
+td.t{font-weight:500}td.a{color:var(--soft);font-size:13px}
+td.p{color:var(--soft);font-size:12.5px;text-align:right;white-space:nowrap;width:48px}
+.era{border-left:2px solid var(--rule);padding:0 0 22px 18px;position:relative}
+.era:last-child{padding-bottom:0}
+.era::before{content:"";position:absolute;left:-6px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.era-y{font-family:"Gowun Batang",serif;font-size:18px;font-weight:700}
+.era-t{font-size:14px;color:var(--soft);margin-left:8px}
+.era p{font-size:14px;margin:4px 0 0}
+.year-block{margin-bottom:30px}
+.year-block h3{font-family:"Gowun Batang",serif;font-size:22px;padding-bottom:5px;border-bottom:2px solid var(--ink);margin:0}
+.yb-count{font-size:13px;color:var(--soft);font-family:"IBM Plex Sans KR",sans-serif;font-weight:400;float:right;padding-top:8px}
+.tl{position:relative;height:136px;border-bottom:1px solid var(--ink);margin-bottom:8px}
+.tl i{position:absolute;bottom:0;width:7px;height:7px;border-radius:50%;background:var(--lit);transform:translateX(-3.5px);opacity:.75}
+.tl .ax{position:absolute;bottom:-22px;font-size:11px;color:var(--soft);transform:translateX(-50%)}
+@media (max-width:520px){.bar-row{grid-template-columns:60px 1fr 34px}.spines{min-height:76px}.fact .num{font-size:28px}
+header{padding:28px 0 0}.kicker{margin:0 0 10px}h1{margin:0 0 6px}
+section:first-of-type{padding-top:20px}
+.sec-head{margin-bottom:10px}
+.modes{margin:2px 0 10px}
+.legend{margin:0 0 8px}
+#fhint{min-height:0;margin:0 0 6px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><div class="wrap">
+<header>
+<p class="kicker" id="date-range">2021년 12월 28일 — 2026년 9월 11일</p>
+<h1>격주 금요일, <span id="h1-total">112</span>권의 기록</h1>
+</header>
+
+<section>
+<div class="sec-head"><p id="lede-text"><strong style="font-family:'Gowun Batang',serif;font-size:17px">서가</strong> · 책등 하나 = 책 한 권, 높이 = 쪽수. 한 칸 26권.</p></div>
+<div class="modes" role="group" aria-label="색상 기준">
+<button class="mode" data-mode="lang" aria-pressed="true">원어</button>
+<button class="mode" data-mode="genre" aria-pressed="false">장르</button>
+<button class="mode" data-mode="sub" aria-pressed="false">세부 장르</button>
+<button class="mode" data-mode="nobel" aria-pressed="false">노벨문학상</button>
+<button class="mode" data-mode="female" aria-pressed="false">여성 작가</button></div>
+<p class="fhint" style="margin:-12px 0 10px">색을 누르면 그 분류만 골라 볼 수 있습니다.</p>
+<div class="legend" id="legend"></div>
+<p class="fhint" id="fhint"></p>
+<div id="shelf"></div>
+<p class="hint">책등을 누르면 그 줄 아래에 책 정보가 열립니다.</p>
+</section>
+
+<section>
+<div class="sec-head"><h2>연도별 독서량</h2>
+<p id="yearcount-text">2023년이 26권으로 가장 많았고 이후로도 23–25권을 유지했습니다.</p></div>
+<div class="bars" id="yearbars"></div>
+<p class="note" style="margin-top:16px" id="yearcount-note"></p></section>
+
+<section>
+<div class="sec-head"><h2>논픽션에서 문학으로</h2>
+<p>가장 뚜렷한 변화입니다. 첫 해에는 논픽션이 절반을 넘었지만 2023년을 기점으로 소설 중심 모임이 되었습니다. 아래는 111권을 열 갈래로 나눈 것이고, 서가에서 '세부 장르' 모드를 켜면 같은 색으로 볼 수 있습니다.</p></div>
+<div id="genrestack"></div>
+<div class="legend"><div class="lg"><span class="sw" style="background:var(--lit)"></span>문학</div><div class="lg"><span class="sw" style="background:var(--non)"></span>논픽션</div></div>
+<p class="note" style="margin-top:18px">열 갈래로 나눠보면 성격 변화가 분명합니다. <strong>실용·자기계발 3권은 전부 2023년 이전</strong>이고 2024년 이후로는 한 권도 없습니다. 반대로 <strong>과학·의학 8권 중 7권이 2024년 이후</strong>에 몰려 있습니다. 『원씽』·『인플레이션에서 살아남기』 자리를 『침묵의 봄』·『넥서스』·『경험의 멸종』이 대신한 셈입니다. 문학 쪽에서는 <strong>소설집 12권 중 5권이 2026년</strong>에 몰려 있어 최근 단편 취향이 뚜렷합니다. 동화·청소년 3권은 모두 2022년 한 해에 읽었습니다.</p>
+<div class="bars" id="subbars" style="margin-top:22px"></div></section>
+
+<section>
+<div class="sec-head"><h2>어떤 언어로 쓰인 책인가</h2>
+<p>저자의 국적이 아니라 작품이 처음 쓰인 언어 기준입니다. 열네 개 언어가 서가에 올랐습니다.</p></div>
+<div class="bars" id="langbars"></div>
+<p class="note" style="margin-top:18px">기타 7권은 스웨덴어·포르투갈어·이탈리아어·폴란드어·노르웨이어·체코어·터키어 각 1권입니다. 영어와 한국어가 74%를 차지하지만 아프리카·중동·인도·동남아 언어는 아직 한 권도 없습니다. 한국 태생 저자가 독일어로 쓴 『피로사회』는 독일어로 집계했습니다.</p></section>
+
+<section>
+<div class="sec-head"><h2>작품이 태어난 해</h2>
+<p>1606년 『맥베스』부터 2025년 『말뚝들』까지 420년. 점 하나가 책 한 권이고, 가로 위치는 그 작품이 처음 발표된 해입니다.</p></div>
+<div class="tl" id="timeline"></div><div style="height:26px"></div>
+<div class="bars" id="erabars"></div>
+<p class="note" style="margin-top:18px" id="eranote"></p></section>
+
+<section>
+<div class="sec-head"><h2>노벨문학상 수상 작가</h2>
+<p id="nobel-text">노벨문학상은 개별 작품이 아니라 작가의 전체 업적에 주어지며, 아래는 모두 수상 이전에 쓰인 책입니다.</p></div>
+<div class="dots" id="nobeldots"></div>
+<table id="nobeltable"></table>
+<p class="note" style="margin-top:18px" id="nobel-note">수상 직후 따라 읽는 편이기도 합니다 — 욘 포세는 2023년 수상 뒤 2024년 11월에, 한강은 2024년 10월 수상 뒤 2025년 1월에, 아니 에르노는 2022년 수상 뒤 2026년 9월에 골랐습니다.</p></section>
+
+<section>
+<div class="sec-head"><h2>여성 작가</h2>
+<p id="female-text">『광화문에서 읽다 거닐다 느끼다』는 위원회 엮음이라 집계에서 제외했습니다.</p></div>
+<div id="femstack"></div>
+<div class="legend"><div class="lg"><span class="sw" style="background:var(--on)"></span>여성 작가</div><div class="lg"><span class="sw" style="background:var(--off)"></span>남성 작가</div></div>
+<p class="note" style="margin-top:18px">워튼·브론테·울프·라슨·레싱 같은 고전 작가와 한강·최은영·정세랑·권여선·김초엽 같은 동시대 한국 작가가 고르게 섞여 있습니다.</p></section>
+
+<section>
+<div class="sec-head"><h2>두 번 이상 읽은 작가</h2><p>다섯 명이 나란히 두 작품씩. 한 작가를 연달아 파고드는 시기가 있었습니다.</p></div>
+<table><thead><tr><th style="width:34%">작가</th><th style="width:12%">작품</th><th>제목</th></tr></thead><tbody>
+<tr><td class="t">요한 볼프강 폰 괴테</td><td class="n">2</td><td class="a">파우스트, 젊은 베르테르의 슬픔</td></tr>
+<tr><td class="t">알베르 카뮈</td><td class="n">2</td><td class="a">이방인, 페스트</td></tr>
+<tr><td class="t">가즈오 이시구로</td><td class="n">2</td><td class="a">남아 있는 나날, 나를 보내지 마</td></tr>
+<tr><td class="t">클레어 키건</td><td class="n">2</td><td class="a">맡겨진 소녀, 이처럼 사소한 것들</td></tr>
+<tr><td class="t">유시민</td><td class="n">2</td><td class="a">거꾸로 읽는 세계사, 문과 남자의 과학 공부</td></tr></tbody></table>
+<p class="note" style="margin-top:18px">『파우스트』는 1부와 2부를 2023년 6월 9일과 23일에 나눠 읽었습니다. 그해 6–7월은 괴테를 연달아 읽은 가장 밀도 높은 구간이었고, 카뮈도 같은 해 2월에 2주 연속이었습니다. 이 '작가 집중 읽기'는 2024년 클레어 키건을 끝으로 자취를 감췄습니다.</p></section>
+
+<section>
+<div class="sec-head"><h2>다섯 개의 시기</h2></div>
+<div class="era"><div><span class="era-y">2021</span><span class="era-t" id="era-2021-t">시작 · 1권</span></div><p>12월 28일 『공정하다는 착각』으로 첫 모임을 가졌습니다.</p></div>
+<div class="era"><div><span class="era-y">2022</span><span class="era-t" id="era-2022-t">탐색기 · 20권 6,767쪽</span></div><p>실용서와 베스트셀러 중심. 논픽션이 60%로 가장 높았고 동화도 두 권 읽었습니다.</p></div>
+<div class="era"><div><span class="era-y">2023</span><span class="era-t" id="era-2023-t">고전 전환기 · 26권 8,166쪽</span></div><p>카뮈·괴테·브론테·울프. 가장 많이 읽었으면서 난이도도 가장 크게 올라간 해입니다.</p></div>
+<div class="era"><div><span class="era-y">2024</span><span class="era-t" id="era-2024-t">한국문학 강세 · 23권 8,065쪽</span></div><p>한국어 원작 9권. 김훈·이슬아·정보라가 한 해 안에 모였습니다.</p></div>
+<div class="era"><div><span class="era-y">2025</span><span class="era-t" id="era-2025-t">균형기 · 25권 7,866쪽</span></div><p>노벨문학상 수상 작가 7권, 과학·의학 논픽션 4권. 언어·장르 다양성이 가장 높았던 해입니다.</p></div>
+<div class="era"><div><span class="era-y">2026</span><span class="era-t" id="era-2026-t">동시대 소설 (진행 중)</span></div><p>앙드레아·쿠앙·김기태·유래혁·에르노 등 최근작 비중이 높습니다.</p></div></section>
+
+<section>
+<div class="facts">
+<div class="fact"><span class="num" id="fact-total">–</span><span class="lbl">읽은 책</span></div>
+<div class="fact"><span class="num" id="fact-pages">–</span><span class="lbl">읽은 쪽수</span></div>
+<div class="fact"><span class="num" id="fact-langs">–</span><span class="lbl">원어 언어 수</span></div>
+<div class="fact"><span class="num" id="fact-span">–</span><span class="lbl">작품 연대 폭</span></div>
+</div></section>
+
+<section><div class="sec-head"><h2>전체 목록</h2><p id="fulllist-text">전체 목록.</p></div><div id="full"></div></section>
+</div>
+<script>
+const D=[[2026,"01.09","그녀를 지키다","장바티스트 앙드레아",632,"프랑스어",2023,"문학",0,0,0,"장편소설"],[2026,"01.23","축복받은 집","줌파 라히리",320,"영어",1999,"문학",0,1,0,"소설집"],[2026,"02.13","옐로페이스","R.F. 쿠앙",444,"영어",2023,"문학",0,1,0,"장편소설"],[2026,"02.27","어떤 동사의 멸종","한승태",404,"한국어",2024,"논픽션",0,0,0,"에세이·회고"],[2026,"03.13","두 사람의 인터내셔널","김기태",336,"한국어",2024,"문학",0,0,0,"소설집"],[2026,"03.27","순수의 시대","이디스 워튼",457,"영어",1920,"문학",0,1,0,"장편소설"],[2026,"04.10","불안","알랭 드 보통",372,"영어",2004,"논픽션",0,0,0,"철학·사상"],[2026,"04.24","꾸뻬 씨의 행복 여행","프랑수아 를로르",220,"프랑스어",2002,"문학",0,0,0,"장편소설"],[2026,"05.08","수족관","유래혁",380,"한국어",2023,"문학",0,0,0,"장편소설"],[2026,"05.22","종이 동물원","켄 리우",568,"영어",2016,"문학",0,0,0,"소설집"],[2026,"06.12","파격의 고전","이진경",520,"한국어",2016,"논픽션",0,0,0,"철학·사상"],[2026,"06.26","패싱","넬라 라슨",184,"영어",1929,"문학",0,1,0,"장편소설"],[2026,"07.10","내가 틀릴 수도 있습니다","비욘 나티코 린데블라드",320,"기타",2020,"논픽션",0,0,0,"에세이·회고"],[2026,"07.24","달걀의 온기","김혜진",256,"한국어",2024,"문학",0,1,0,"소설집"],[2026,"08.14","편의점 인간","무라타 사야카",204,"일본어",2016,"문학",0,1,0,"장편소설"],[2026,"08.28","체호프 단편선","안톤 체호프",206,"러시아어",1883,"문학",0,0,0,"소설집"],[2026,"09.11","여자아이 기억","아니 에르노",220,"프랑스어",2016,"문학",1,1,2022,"장편소설"],[2026,"09.18","카프네","아베 아키코",364,"일본어",2024,"문학",0,1,0,"장편소설"],[2025,"01.10","소년이 온다","한강",216,"한국어",2014,"문학",1,1,2024,"장편소설"],[2025,"01.24","카타리나 블룸의 잃어버린 명예","하인리히 뵐",170,"독일어",1974,"문학",1,0,1972,"장편소설"],[2025,"02.07","모순","양귀자",307,"한국어",1998,"문학",0,1,0,"장편소설"],[2025,"02.21","역사의 쓸모","최태성",304,"한국어",2019,"논픽션",0,0,0,"역사·인문"],[2025,"03.07","눈먼 자들의 도시","주제 사라마구",476,"기타",1995,"문학",1,0,1998,"장편소설"],[2025,"03.21","반쪼가리 자작","이탈로 칼비노",135,"기타",1952,"문학",0,0,0,"장편소설"],[2025,"04.04","아내를 모자로 착각한 남자","올리버 색스",396,"영어",1985,"논픽션",0,0,0,"과학·의학"],[2025,"04.18","네루다의 우편배달부","안토니오 스카르메타",184,"스페인어",1985,"문학",0,0,0,"장편소설"],[2025,"05.02","8월은 악마의 달","에드나 오브라이언",260,"영어",1965,"문학",0,1,0,"장편소설"],[2025,"05.16","무의식은 어떻게 나를 설계하는가","데이비드 이글먼",344,"영어",2011,"논픽션",0,0,0,"과학·의학"],[2025,"05.30","침묵의 봄","레이첼 카슨",504,"영어",1962,"논픽션",0,1,0,"과학·의학"],[2025,"06.13","맥베스","윌리엄 셰익스피어",160,"영어",1606,"문학",0,0,0,"희곡"],[2025,"06.27","당신 인생의 이야기","테드 창",448,"영어",2002,"문학",0,0,0,"소설집"],[2025,"07.11","구르브 연락 없다","에두아르도 멘도사",186,"스페인어",1991,"문학",0,0,0,"장편소설"],[2025,"07.25","새의 선물","은희경",440,"한국어",1995,"문학",0,1,0,"장편소설"],[2025,"08.08","나를 보내지 마","가즈오 이시구로",500,"영어",2005,"문학",1,0,2017,"장편소설"],[2025,"08.22","공감하는 유전자","요아힘 바우어",276,"독일어",2021,"논픽션",0,0,0,"과학·의학"],[2025,"09.05","파리대왕","윌리엄 골딩",328,"영어",1954,"문학",1,0,1983,"장편소설"],[2025,"09.26","모두가 나의 아들","아서 밀러",162,"영어",1947,"문학",0,0,0,"희곡"],[2025,"10.17","경험의 멸종","크리스틴 로젠",364,"영어",2024,"논픽션",0,1,0,"사회·시사"],[2025,"10.31","소망 없는 불행","페터 한트케",204,"독일어",1972,"문학",1,0,2019,"장편소설"],[2025,"11.14","우리가 빛의 속도로 갈 수 없다면","김초엽",330,"한국어",2019,"문학",0,1,0,"소설집"],[2025,"11.28","넥서스","유발 하라리",684,"영어",2024,"논픽션",0,0,0,"사회·시사"],[2025,"12.12","말뚝들","김홍",312,"한국어",2025,"문학",0,0,0,"장편소설"],[2025,"12.26","설국","가와바타 야스나리",176,"일본어",1937,"문학",1,0,1968,"장편소설"],[2024,"01.19","모스크바의 신사","에이모 토울스",723,"영어",2016,"문학",0,0,0,"장편소설"],[2024,"02.02","펜타닐","벤 웨스트호프",444,"영어",2019,"논픽션",0,0,0,"사회·시사"],[2024,"02.16","최재천의 공부","최재천",312,"한국어",2022,"논픽션",0,0,0,"에세이·회고"],[2024,"03.08","도파민네이션","애나 렘키",316,"영어",2021,"논픽션",0,1,0,"과학·의학"],[2024,"03.22","하얼빈","김훈",308,"한국어",2022,"문학",0,0,0,"장편소설"],[2024,"04.05","파친코","이민진",768,"영어",2017,"문학",0,1,0,"장편소설"],[2024,"04.19","인생의 허무를 어떻게 할 것인가","김영민",308,"한국어",2022,"논픽션",0,0,0,"철학·사상"],[2024,"05.03","당신도 느리게 나이 들 수 있습니다","정희원",288,"한국어",2021,"논픽션",0,0,0,"과학·의학"],[2024,"05.17","마음","나쓰메 소세키",296,"일본어",1914,"문학",0,0,0,"장편소설"],[2024,"05.31","문과 남자의 과학 공부","유시민",304,"한국어",2023,"논픽션",0,0,0,"과학·의학"],[2024,"06.14","맡겨진 소녀","클레어 키건",104,"영어",2010,"문학",0,1,0,"장편소설"],[2024,"06.28","방랑자들","올가 토카르추크",660,"기타",2007,"문학",1,1,2018,"장편소설"],[2024,"07.12","이처럼 사소한 것들","클레어 키건",131,"영어",2021,"문학",0,1,0,"장편소설"],[2024,"07.26","가녀장의 시대","이슬아",316,"한국어",2022,"문학",0,1,0,"장편소설"],[2024,"08.09","달콤 쌉싸름한 초콜릿","라우라 에스키벨",268,"스페인어",1989,"문학",0,1,0,"장편소설"],[2024,"09.06","남아 있는 나날","가즈오 이시구로",348,"영어",1989,"문학",1,0,2017,"장편소설"],[2024,"09.20","저주 토끼","정보라",356,"한국어",2017,"문학",0,1,0,"소설집"],[2024,"10.04","시대 예보 : 핵개인의 시대","송길영",340,"한국어",2023,"논픽션",0,0,0,"사회·시사"],[2024,"10.18","친애하는 슐츠씨","박상현",384,"한국어",2023,"논픽션",0,0,0,"에세이·회고"],[2024,"11.01","샤이닝","욘 포세",120,"기타",2023,"문학",1,0,2023,"장편소설"],[2024,"11.15","이반 일리치의 죽음","레프 톨스토이",144,"러시아어",1886,"문학",0,0,0,"장편소설"],[2024,"11.29","사라진 것들","앤드루 포터",332,"영어",2022,"문학",0,0,0,"소설집"],[2024,"12.13","올리브 키트리지","엘리자베스 스트라우트",495,"영어",2008,"문학",0,1,0,"소설집"],[2023,"01.13","시선으로부터,","정세랑",340,"한국어",2020,"문학",0,1,0,"장편소설"],[2023,"01.27","여덟 단어","박웅현",272,"한국어",2013,"논픽션",0,0,0,"에세이·회고"],[2023,"02.10","이방인","알베르 카뮈",280,"프랑스어",1942,"문학",1,0,1957,"장편소설"],[2023,"02.24","페스트","알베르 카뮈",508,"프랑스어",1947,"문학",1,0,1957,"장편소설"],[2023,"03.10","자기만의 방","버지니아 울프",168,"영어",1929,"논픽션",0,1,0,"에세이·회고"],[2023,"03.24","폭풍의 언덕","에밀리 브론테",572,"영어",1847,"문학",0,1,0,"장편소설"],[2023,"04.07","챗GPT에게 물어보는 인류의 미래","김대식",348,"한국어",2023,"논픽션",0,0,0,"사회·시사"],[2023,"04.21","트러스트","에르난 디아스",488,"영어",2022,"문학",0,0,0,"장편소설"],[2023,"04.28","너무 시끄러운 고독","보후밀 흐라발",144,"기타",1976,"문학",0,0,0,"장편소설"],[2023,"05.12","아버지의 해방일지","정지아",268,"한국어",2022,"문학",0,1,0,"장편소설"],[2023,"05.26","유럽의 시간을 걷다","최경철",536,"한국어",2016,"논픽션",0,0,0,"역사·인문"],[2023,"06.09","파우스트 1","요한 볼프강 폰 괴테",272,"독일어",1808,"문학",0,0,0,"희곡"],[2023,"06.23","파우스트 2","요한 볼프강 폰 괴테",412,"독일어",1832,"문학",0,0,0,"희곡"],[2023,"07.07","젊은 베르테르의 슬픔","요한 볼프강 폰 괴테",244,"독일어",1774,"문학",0,0,0,"장편소설"],[2023,"07.21","깊이에의 강요","파트리크 쥐스킨트",100,"독일어",1995,"문학",0,0,0,"소설집"],[2023,"08.04","새로운 인생","오르한 파묵",401,"기타",1994,"문학",1,0,2006,"장편소설"],[2023,"08.18","모든 삶은 흐른다","로랑스 드빌레르",240,"프랑스어",2022,"논픽션",0,1,0,"철학·사상"],[2023,"09.01","각각의 계절","권여선",276,"한국어",2023,"문학",0,1,0,"소설집"],[2023,"09.15","부의 감각","댄 애리얼리",444,"영어",2017,"논픽션",0,0,0,"사회·시사"],[2023,"09.22","동급생","프레드 울만",160,"영어",1971,"문학",0,0,0,"장편소설"],[2023,"10.13","피로사회","한병철",128,"독일어",2010,"논픽션",0,0,0,"철학·사상"],[2023,"10.27","원씽","게리 켈러",280,"영어",2013,"논픽션",0,0,0,"실용·자기계발"],[2023,"11.10","고래","천명관",455,"한국어",2004,"문학",0,0,0,"장편소설"],[2023,"11.24","포스트 트루스","리 매킨타이어",294,"영어",2018,"논픽션",0,0,0,"사회·시사"],[2023,"12.08","밝은 밤","최은영",344,"한국어",2021,"문학",0,1,0,"장편소설"],[2023,"12.22","다섯째 아이","도리스 레싱",192,"영어",1988,"문학",1,1,2007,"장편소설"],[2022,"01.25","금주 다이어리","클레어 풀리",472,"영어",2017,"논픽션",0,1,0,"에세이·회고"],[2022,"02.18","가재가 노래하는 곳","델리아 오언스",464,"영어",2018,"문학",0,1,0,"장편소설"],[2022,"03.04","싯다르타","헤르만 헤세",240,"독일어",1922,"문학",1,0,1946,"장편소설"],[2022,"04.01","거꾸로 읽는 세계사","유시민",404,"한국어",2021,"논픽션",0,0,0,"역사·인문"],[2022,"04.15","스토너","존 윌리엄스",396,"영어",1965,"문학",0,0,0,"장편소설"],[2022,"04.30","광화문에서 읽다 거닐다 느끼다","광화문글판 문안선정위원회",304,"한국어",2020,"논픽션",0,2,0,"에세이·회고"],[2022,"05.20","물고기는 존재하지 않는다","룰루 밀러",299,"영어",2020,"논픽션",0,1,0,"에세이·회고"],[2022,"06.03","이어령의 마지막 수업","이어령",320,"한국어",2021,"논픽션",0,0,0,"에세이·회고"],[2022,"06.17","앨저넌에게 꽃을","대니얼 키스",448,"영어",1966,"문학",0,0,0,"장편소설"],[2022,"07.01","긴긴밤","루리",144,"한국어",2021,"문학",0,1,0,"동화·청소년"],[2022,"07.29","인플레이션에서 살아남기","오건영",404,"한국어",2022,"논픽션",0,0,0,"실용·자기계발"],[2022,"08.26","멋진 신세계","올더스 헉슬리",400,"영어",1932,"문학",0,0,0,"장편소설"],[2022,"09.02","돌 씹어 먹는 아이","송미경",169,"한국어",2014,"문학",0,1,0,"동화·청소년"],[2022,"09.23","블링크","말콤 글래드웰",372,"영어",2005,"논픽션",0,0,0,"과학·의학"],[2022,"10.07","무엇이 예술인가","아서 단토",248,"영어",2013,"논픽션",0,0,0,"철학·사상"],[2022,"10.21","H마트에서 울다","미셸 자우너",408,"영어",2021,"논픽션",0,1,0,"에세이·회고"],[2022,"11.18","소크라테스 익스프레스","에릭 와이너",524,"영어",2020,"논픽션",0,0,0,"철학·사상"],[2022,"12.02","아몬드","손원평",308,"한국어",2017,"문학",0,1,0,"동화·청소년"],[2022,"12.16","아무튼, 클래식","김호경",159,"한국어",2021,"논픽션",0,1,0,"에세이·회고"],[2022,"12.30","뼛속까지 내려가서 써라","나탈리 골드버그",284,"영어",1986,"논픽션",0,1,0,"실용·자기계발"],[2021,"12.28","공정하다는 착각","마이클 샌델",420,"영어",2020,"논픽션",0,0,0,"철학·사상"]];
+const LANG={영어:'--en',한국어:'--ko',독일어:'--de',프랑스어:'--fr',일본어:'--ja',스페인어:'--es',러시아어:'--ru',기타:'--etc'};
+const SUB={'장편소설':'--s1','소설집':'--s2','희곡':'--s3','동화·청소년':'--s4','에세이·회고':'--s5','과학·의학':'--s6','철학·사상':'--s7','사회·시사':'--s8','역사·인문':'--s9','실용·자기계발':'--s10'};
+const V=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+const B=D.map((r,i)=>({i,year:r[0],date:r[1],title:r[2],author:r[3],pages:r[4],lang:r[5],pub:r[6],genre:r[7],nobel:r[8],fem:r[9],ny:r[10],sub:r[11]}));
+const YEARS=[2026,2025,2024,2023,2022,2021];
+const PMIN=Math.min(...B.map(b=>b.pages)),PMAX=Math.max(...B.map(b=>b.pages));
+let MODE='lang',FILTER=null;
+const keyOf=b=>MODE==='lang'?b.lang:MODE==='genre'?b.genre:MODE==='sub'?b.sub:MODE==='nobel'?(b.nobel?'수상 작가':'그 외'):(b.fem===1?'여성':b.fem===0?'남성':'위원회 엮음');
+const baseColor=b=>MODE==='lang'?V(LANG[b.lang]):MODE==='genre'?(b.genre==='문학'?V('--lit'):V('--non')):MODE==='sub'?V(SUB[b.sub]):MODE==='nobel'?(b.nobel?V('--on'):V('--off')):(b.fem===1?V('--on'):V('--off'));
+const color=b=>(FILTER&&keyOf(b)!==FILTER)?'#E6E4DF':baseColor(b);
+const shelf=document.getElementById('shelf');
+YEARS.forEach(y=>{
+ const rows=B.filter(b=>b.year===y),lit=rows.filter(b=>b.genre==='문학').length,pg=rows.reduce((s,b)=>s+b.pages,0);
+ const row=document.createElement('div'); row.className='shelf-row';
+ row.innerHTML='<div class="shelf-meta"><span class="shelf-year">'+y+'</span><span class="shelf-count">'+rows.length+'권 · '+pg.toLocaleString()+'쪽 · 문학 '+lit+' · 논픽션 '+(rows.length-lit)+'</span></div>';
+ const sp=document.createElement('div'); sp.className='spines';
+ rows.forEach(b=>{const el=document.createElement('button');el.className='spine';el.dataset.i=b.i;
+  el.style.height=(30+(b.pages-PMIN)/(PMAX-PMIN)*58).toFixed(1)+'px';
+  el.setAttribute('aria-pressed','false'); el.setAttribute('aria-label',b.title+' — '+b.author+', '+b.pages+'쪽');
+  el.addEventListener('click',()=>sel(b,el)); sp.appendChild(el);});
+ row.appendChild(sp);
+ const ro=document.createElement('div'); ro.className='readout'; ro.id='ro'+y; ro.setAttribute('aria-live','polite');
+ row.appendChild(ro); shelf.appendChild(row);});
+function paint(){document.querySelectorAll('.spine').forEach(el=>{el.style.background=color(B[+el.dataset.i]);});
+ let it=[];
+ if(MODE==='lang')it=Object.keys(LANG).map(k=>[k+' '+B.filter(b=>b.lang===k).length,V(LANG[k]),k]);
+ else if(MODE==='genre')it=[['문학 '+B.filter(b=>b.genre==='문학').length,V('--lit'),'문학'],['논픽션 '+B.filter(b=>b.genre==='논픽션').length,V('--non'),'논픽션']];
+ else if(MODE==='sub')it=Object.keys(SUB).map(k=>[k+' '+B.filter(b=>b.sub===k).length,V(SUB[k]),k]);
+ else if(MODE==='nobel')it=[['수상 작가 '+B.filter(b=>b.nobel).length,V('--on'),'수상 작가'],['그 외 '+B.filter(b=>!b.nobel).length,V('--off'),'그 외']];
+ else it=[['여성 '+B.filter(b=>b.fem===1).length,V('--on'),'여성'],['남성 '+B.filter(b=>b.fem===0).length,V('--off'),'남성'],['위원회 엮음 1',V('--off'),'위원회 엮음']];
+ const L=document.getElementById('legend');
+ L.className='legend'+(FILTER?' filtered':'');
+ L.innerHTML=it.map(([t,c,k])=>'<button class="lg" type="button" data-k="'+k+'" aria-pressed="'+(FILTER===k)+'"><span class="sw" style="background:'+c+'"></span>'+t+'</button>').join('');
+ L.querySelectorAll('button.lg').forEach(btn=>btn.addEventListener('click',()=>{
+   FILTER=(FILTER===btn.dataset.k)?null:btn.dataset.k; paint();
+
+}));
+ document.getElementById('fhint').textContent=FILTER?'‘'+FILTER+'’만 표시 중 — 다시 누르면 전체로 돌아갑니다.':'';}
+let cur=null;
+function sel(b,el){const same=cur===el;
+ if(cur)cur.setAttribute('aria-pressed','false');
+ document.querySelectorAll('.readout').forEach(r=>{if(r.id!=='ro'+b.year)r.classList.remove('open');});
+ if(same){document.getElementById('ro'+b.year).classList.remove('open');cur=null;return;}
+ el.setAttribute('aria-pressed','true');cur=el;
+ const tg=['<span class="tag">'+b.pages+'쪽</span>',
+  '<button class="tag" type="button" data-m="lang" data-f="'+b.lang+'">'+b.lang+'</button>',
+  '<span class="tag">'+b.pub+'년 작</span>',
+  '<button class="tag" type="button" data-m="sub" data-f="'+b.sub+'">'+b.sub+'</button>'];
+ if(b.nobel)tg.push('<button class="tag hl" type="button" data-m="nobel" data-f="수상 작가">노벨문학상 '+b.ny+'</button>');
+ const ro=document.getElementById('ro'+b.year);
+ ro.innerHTML='<div class="r-date">'+b.year+'. '+b.date+'</div><div class="r-title">'+b.title+'</div><div class="r-author">'+b.author+'</div><div class="r-tags">'+tg.join('')+'</div>';
+ ro.classList.add('open');
+ ro.querySelectorAll('button.tag').forEach(t=>t.addEventListener('click',()=>applyFilter(t.dataset.m,t.dataset.f)));}
+function applyFilter(mode,key){
+ MODE=mode; FILTER=key;
+ document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.mode===mode)));
+ paint();
+ document.getElementById('shelf').scrollIntoView({behavior:'smooth',block:'start'});}
+document.querySelectorAll('.mode').forEach(btn=>btn.addEventListener('click',()=>{
+ document.querySelectorAll('.mode').forEach(b=>b.setAttribute('aria-pressed','false'));
+ btn.setAttribute('aria-pressed','true');MODE=btn.dataset.mode;FILTER=null;paint();}));
+paint();
+/* ===== 본문 서술 자동계산 ===== */
+(function(){
+  const total = B.length;
+  const totalPages = B.reduce((s,b)=>s+b.pages,0);
+  const langs = new Set(B.map(b=>b.lang)).size;
+  const years = B.map(b=>b.pub);
+  const span = Math.max(...years) - Math.min(...years) + 1;
+  const lastDate = B.reduce((a,b)=> (b.year>a.year || (b.year===a.year && b.date>a.date)) ? b : a);
+  const firstDate = B.reduce((a,b)=> (b.year<a.year || (b.year===a.year && b.date<a.date)) ? b : a);
+  const fmt = n => n.toLocaleString();
+
+  const set = (id,txt) => { const el=document.getElementById(id); if(el) el.textContent=txt; };
+  const setHTML = (id,html) => { const el=document.getElementById(id); if(el) el.innerHTML=html; };
+
+  set('fact-total', total+'권');
+  set('fact-pages', fmt(totalPages));
+  // '기타'는 여러 언어를 묶은 값이라 실제 언어 수는 다름 (기타=7개 언어 세부: 스웨덴어·포르투갈어·이탈리아어·폴란드어·노르웨이어·체코어·터키어)
+  const ETC_LANGS = 7;
+  const mainLangs = new Set(B.map(b=>b.lang)).size; // 기타 포함 카테고리 수
+  const hasEtc = B.some(b=>b.lang==='기타');
+  const realLangs = hasEtc ? (mainLangs - 1 + ETC_LANGS) : mainLangs;
+  set('fact-langs', realLangs);
+  set('fact-span', span+'년');
+  set('h1-total', total);
+  const fmtDate = d => d.replace(/^0/,'').replace('.','월 ').replace(/^0/,'');
+  set('date-range', `${firstDate.year}년 ${fmtDate(firstDate.date)}일 — ${lastDate.year}년 ${fmtDate(lastDate.date)}일`);
+
+  const yearsList=[...new Set(B.map(b=>b.year))].sort((a,b)=>b-a);
+  const maxYear=Math.max(...yearsList);
+  const maxCnt=Math.max(...yearsList.map(y=>B.filter(b=>b.year===y).length));
+  const topYear=yearsList.find(y=>B.filter(b=>b.year===y).length===maxCnt);
+  const lastInMaxYear=B.filter(b=>b.year===maxYear).reduce((a,b)=>b.date>a.date?b:a);
+  set('yearcount-text', `${topYear}년이 ${maxCnt}권으로 가장 많았습니다. ${maxYear}년은 ${fmtDate(lastInMaxYear.date)}일까지입니다.`);
+
+  const perYear=yearsList.map(y=>{
+    const r=B.filter(b=>b.year===y);
+    return {y,n:r.length,p:r.reduce((s,b)=>s+b.pages,0)};
+  }).filter(x=>x.n>=10);
+  if(perYear.length>=2){
+    const maxPerBook=perYear.reduce((a,b)=> (b.p/b.n)>(a.p/a.n)?b:a);
+    set('yearcount-note', `권수와 분량이 꼭 함께 가지는 않습니다. ${maxPerBook.y}년은 ${maxPerBook.n}권에 ${fmt(maxPerBook.p)}쪽으로 권당 ${Math.round(maxPerBook.p/maxPerBook.n)}쪽 — 가장 두꺼운 해입니다.`);
+  }
+
+  const nobelBooks = B.filter(b=>b.nobel);
+  const nobelAuthors = new Set(nobelBooks.map(b=>b.author)).size;
+  setHTML('nobel-text', `${total}권 중 ${nobelBooks.length}권, 작가로는 ${nobelAuthors}명. ` + document.getElementById('nobel-text').textContent);
+
+  const femDenom = B.filter(b=>b.fem!==2).length;
+  const femCount = B.filter(b=>b.fem===1).length;
+  setHTML('female-text', `개인 저자 ${femDenom}권 중 ${femCount}권. ` + document.getElementById('female-text').textContent);
+
+  set('fulllist-text', `${total}권 전체.`);
+
+  yearsList.slice().sort((a,b)=>a-b).forEach((y,i,arr)=>{
+    const el=document.getElementById('era-'+y+'-t');
+    if(!el) return;
+    const r=B.filter(b=>b.year===y);
+    const pages=r.reduce((s,b)=>s+b.pages,0);
+    const isLast = y===arr[arr.length-1] && y===maxYear;
+    let label = el.textContent.split('·')[0].trim().replace(/\s*\(진행 중\)\s*$/,'');
+    el.textContent = `${label} · ${r.length}권 ${fmt(pages)}쪽` + (isLast ? ' (진행 중)' : '');
+  });
+})();
+const cnt=y=>B.filter(b=>b.year===y).length,mx=Math.max(...YEARS.map(cnt));
+document.getElementById('yearbars').innerHTML=YEARS.slice().reverse().map(y=>{const n=cnt(y);
+ return '<div class="bar-row"><span class="bar-lbl">'+y+(y===2026?'*':'')+'</span><span class="bar-track"><span class="bar-fill" style="width:'+(n/mx*100)+'%;background:var(--ko)"></span></span><span class="bar-val">'+n+'</span></div>';}).join('');
+document.getElementById('genrestack').innerHTML=YEARS.slice().reverse().map(y=>{
+ const r=B.filter(b=>b.year===y),n=r.length,l=r.filter(b=>b.genre==='문학').length,nf=n-l,pl=l/n*100,pn=nf/n*100;
+ return '<div class="stack-row"><span class="bar-lbl">'+y+'</span><div class="stack">'+(l?'<span style="width:'+pl+'%;background:var(--lit)">'+(pl>16?l:'')+'</span>':'')+(nf?'<span style="width:'+pn+'%;background:var(--non)">'+(pn>16?nf:'')+'</span>':'')+'</div></div><div class="stack-row"><span></span><span class="note" style="font-size:12px;margin-bottom:10px;display:block">논픽션 '+Math.round(nf/n*100)+'%</span></div>';}).join('');
+const sc=Object.keys(SUB).map(k=>[k,B.filter(b=>b.sub===k).length]),smx=Math.max(...sc.map(x=>x[1]));
+document.getElementById('subbars').innerHTML=sc.map(([k,n])=>'<div class="bar-row"><span class="bar-lbl" style="font-size:12px">'+k+'</span><span class="bar-track"><span class="bar-fill" style="width:'+(n/smx*100)+'%;background:var('+SUB[k]+')"></span></span><span class="bar-val">'+n+'</span></div>').join('');
+const lc=Object.keys(LANG).map(k=>[k,B.filter(b=>b.lang===k).length]).sort((a,b)=>b[1]-a[1]),lmx=lc[0][1];
+document.getElementById('langbars').innerHTML=lc.map(([k,n])=>'<div class="bar-row"><span class="bar-lbl">'+k+'</span><span class="bar-track"><span class="bar-fill" style="width:'+(n/lmx*100)+'%;background:var('+LANG[k]+')"></span></span><span class="bar-val">'+n+'</span></div>').join('');
+const T0=1600,T1=2040,lanes=[];
+document.getElementById('timeline').innerHTML=B.slice().sort((a,b)=>a.pub-b.pub).map(b=>{
+ const x=(b.pub-T0)/(T1-T0)*100;let k=0;while(lanes[k]!==undefined&&x-lanes[k]<1.6)k++;lanes[k]=x;
+ return '<i style="left:'+x+'%;bottom:'+(k*9)+'px" title="'+b.title+' ('+b.pub+')"></i>';}).join('')
+ +[1600,1700,1800,1900,2000].map(y=>'<span class="ax" style="left:'+((y-T0)/(T1-T0)*100)+'%">'+y+'</span>').join('');
+const ERA=[['1600–1799',1600,1799],['1800–1899',1800,1899],['1900–1949',1900,1949],['1950–1999',1950,1999],['2000–2019',2000,2019],['2020–',2020,2100]];
+const ec=ERA.map(([l,a,b2])=>[l,B.filter(b=>b.pub>=a&&b.pub<=b2).length]),emx=Math.max(...ec.map(x=>x[1]));
+document.getElementById('erabars').innerHTML=ec.map(([l,n])=>'<div class="bar-row"><span class="bar-lbl">'+l+'</span><span class="bar-track"><span class="bar-fill" style="width:'+(n/emx*100)+'%;background:var(--etc)"></span></span><span class="bar-val">'+n+'</span></div>').join('');
+document.getElementById('eranote').textContent='2000년 이후 작품이 '+(ec[4][1]+ec[5][1])+'권으로 '+Math.round((ec[4][1]+ec[5][1])/B.length*100)+'%입니다. 고전을 집중적으로 읽은 2023년에도 무게중심은 동시대에 있었습니다. 1900년 이전 작품은 '+(ec[0][1]+ec[1][1])+'권뿐입니다.';
+document.getElementById('nobeldots').innerHTML=B.map(b=>'<span class="dot'+(b.nobel?' on':'')+'" title="'+b.title+'"></span>').join('');
+document.getElementById('nobeltable').innerHTML='<thead><tr><th style="width:52px">읽은 해</th><th>작품</th><th style="width:36%">작가 (수상)</th></tr></thead><tbody>'+B.filter(b=>b.nobel).sort((a,b)=>a.year-b.year||a.date.localeCompare(b.date)).map(b=>'<tr><td class="d">'+b.year+'</td><td class="t">'+b.title+'</td><td class="a">'+b.author+' ('+b.ny+')</td></tr>').join('')+'</tbody>';
+document.getElementById('femstack').innerHTML=YEARS.slice().reverse().map(y=>{
+ const r=B.filter(b=>b.year===y&&b.fem!==2),n=r.length,f=r.filter(b=>b.fem===1).length,pf=f/n*100;
+ return '<div class="stack-row"><span class="bar-lbl">'+y+'</span><div class="stack">'+(f?'<span style="width:'+pf+'%;background:var(--on)">'+(pf>16?f:'')+'</span>':'')+'<span style="width:'+(100-pf)+'%;background:var(--off)"></span></div></div><div class="stack-row"><span></span><span class="note" style="font-size:12px;margin-bottom:10px;display:block">'+f+'/'+n+' · '+Math.round(pf)+'%</span></div>';}).join('');
+document.getElementById('full').innerHTML=YEARS.map(y=>{const r=B.filter(b=>b.year===y);
+ return '<div class="year-block"><h3>'+y+'<span class="yb-count">'+r.length+'권 · '+r.reduce((s,b)=>s+b.pages,0).toLocaleString()+'쪽</span></h3><table><tbody>'+r.map(b=>'<tr><td class="d">'+b.date+'</td><td class="t">'+b.title+'</td><td class="a">'+b.author+'</td><td class="p">'+b.pages+'쪽</td></tr>').join('')+'</tbody></table></div>';}).join('');
+</script></body></html>
