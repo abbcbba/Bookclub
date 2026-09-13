@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>계절의 서가</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FFFFFF;--paper2:#F1EFEA;--ink:#1F2226;--soft:#6C6A63;--rule:#E0DDD6;--off:#D8D5CE;
+--en:#A03A34;--ko:#1F4D45;--de:#6B5B95;--fr:#C1902F;--ja:#7D9A4F;--es:#C4603D;--ru:#2F5D8C;--zh:#8E4A6B;--sv:#3E8A8C;--etc:#8A7A69;
+--ebook:#1F4D45;--paperbook:#C1902F;--buy:#6B5B95;--rent:#A03A34;--special:#C4603D;--normal:#2F5D8C;--ott:#5C7A6A;
+--netflix:#E50914;--tving:#FF6B00;--wavve:#1F8FFF;--disneyplus:#0F3EBE;--coupangplay:#FF3D75;--appletv:#1D1D1F;
+--r1:#F3E4E1;--r2:#E3BFB8;--r3:#CE8F84;--r4:#B85B4C;--r5:#A03A34;}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans KR",system-ui,sans-serif;font-size:15px;line-height:1.7;letter-spacing:-.01em}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
+h1,h2{font-family:"Gowun Batang",Georgia,serif}
+h1{font-size:clamp(27px,7vw,42px);font-weight:700;line-height:1.25;letter-spacing:-.02em;margin:0 0 10px}
+header{padding:46px 0 0}
+.kicker{font-size:12.5px;color:var(--soft);margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:0 9px}
+.kicker .dot{width:3px;height:3px;border-radius:50%;background:var(--off);flex:none}
+.kicker b{font-family:"Gowun Batang",serif;font-size:14px;font-weight:700;color:var(--ink);margin-right:2px}
+section{padding-top:40px}
+.year-head{display:flex;align-items:baseline;gap:10px;margin:0 0 4px;padding-top:16px;border-top:1px solid var(--rule)}
+.year-head h2{font-size:26px;font-weight:700;margin:0;line-height:1.2}
+.year-head span{font-size:12.5px;color:var(--soft)}
+.sec-head{margin-bottom:16px}.sec-head p{margin:0;color:var(--soft);font-size:14px}
+.sec-word{font-family:"Gowun Batang",serif;font-size:16px;font-weight:700;color:var(--ink)}
+.shelf-row{margin-bottom:16px}
+.shelf-meta{display:flex;align-items:baseline;gap:9px;margin-bottom:6px;flex-wrap:wrap}
+.shelf-year{font-family:"Gowun Batang",serif;font-size:19px;font-weight:700}
+.shelf-count{font-size:12.5px;color:var(--soft)}
+.spines{display:grid;gap:2px;align-items:end;border-bottom:3px solid var(--ink);min-height:92px}
+.spine{border:0;padding:0;margin:0;width:100%;border-radius:1px 1px 0 0;cursor:pointer;transition:filter .12s,transform .12s;transform-origin:bottom center}
+.spine:hover{filter:brightness(1.22)}
+.spine:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.spine[aria-pressed="true"]{transform:translateY(-7px);filter:brightness(1.3)}
+.modes{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.mode{font-family:inherit;font-size:13px;padding:6px 13px;border:1px solid var(--rule);background:transparent;color:var(--soft);border-radius:999px;cursor:pointer}
+.mode[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.readout{border:1px solid var(--rule);border-top:0;background:var(--paper2);padding:0 16px;overflow:hidden;max-height:0;opacity:0;transition:max-height .28s ease,opacity .2s ease,padding .28s ease}
+.readout.open{max-height:460px;opacity:1;padding:14px 16px 16px}
+.r-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-7px -8px 0 0}
+.ronav{display:flex;flex:none}
+.rnav{font-family:inherit;font-size:16px;line-height:1;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:#8E897F;cursor:pointer;padding:0}
+.rnav:hover{color:var(--ink)}
+.rnav:focus-visible{outline:2px solid var(--ink);outline-offset:-2px;color:var(--ink)}
+.readout .r-date{font-size:12.5px;color:var(--soft)}
+.readout .r-title{font-family:"Gowun Batang",serif;font-size:20px;font-weight:700;line-height:1.35;margin:2px 0 3px}
+.readout .r-author{font-size:14px;color:var(--soft)}
+.r-tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11.5px;padding:2px 9px;border:1px solid var(--rule);border-radius:999px;color:var(--soft)}
+button.tag{font-family:inherit;background:transparent;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+button.tag:hover{background:#fff;color:var(--ink);border-color:var(--ink)}
+.hint{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+.legend{display:flex;flex-wrap:wrap;gap:5px 6px;margin:0 0 12px}
+button.lg{font-family:inherit;font-size:12px;border:1px solid var(--rule);background:transparent;padding:4px 10px 4px 7px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--soft);transition:background .15s,border-color .15s,opacity .15s}
+button.lg:hover{background:var(--paper2)}
+button.lg:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+button.lg[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);font-weight:500}
+.legend.filtered button.lg[aria-pressed="false"]{opacity:.42}
+.fhint{font-size:12px;color:var(--soft);margin:0 0 12px;min-height:1.2em}
+.sw{width:11px;height:11px;border-radius:2px;flex:none}
+.tile{position:relative;border-radius:5px 5px 0 0}
+.tile::after{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);width:0;height:0;border-style:solid;border-width:3.5px 0 3.5px 6px;border-color:transparent transparent transparent var(--mk,#fff)}
+.blank{color:var(--off);font-style:italic}
+/* 그 해의 숫자들 */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:15px 0 13px;margin-top:2px}
+.stat{text-align:center}
+.stat b{display:block;font-family:"Gowun Batang",serif;font-size:clamp(21px,5.6vw,30px);font-weight:700;line-height:1.15;color:var(--ink)}
+.stat b i{font-style:normal;font-size:.52em;font-weight:400;color:var(--soft);margin-left:1px}
+.stat span{display:block;font-size:11px;color:var(--soft);margin-top:2px;letter-spacing:-.02em}
+.stat-note{font-size:12.5px;color:var(--soft);margin:2px 0 0}
+.stat-note b{font-family:"Gowun Batang",serif;font-weight:700;color:var(--ink)}
+/* 만난 날들 (월별 막대) */
+.days{margin-top:14px}
+.days-lede{font-size:13px;color:var(--soft);margin:0 0 12px}
+.days-lede b{font-family:"Gowun Batang",serif;font-weight:700;color:var(--ink)}
+.mbars{display:grid;grid-template-columns:repeat(12,1fr);gap:0 3px;align-items:end;height:96px}
+.mcol{display:flex;align-items:flex-end;justify-content:center;gap:2px;height:96px}
+.mb{width:6px;flex:none}
+.mb.bk{background:#4A4740}
+.mb.mv{box-shadow:inset 0 0 0 1.5px #4A4740}
+.mb.dr{background:#BFBBB2}
+.maxis{display:grid;grid-template-columns:repeat(12,1fr);gap:0 3px;border-top:1px solid var(--rule);padding-top:5px;margin-top:4px}
+.mlab{text-align:center;font-size:11px;color:var(--soft);line-height:1.4}
+.mlab b{display:block;font-family:"Gowun Batang",serif;font-size:12px;font-weight:700;color:var(--ink);min-height:1.2em}
+.days-key{font-size:12px;color:var(--soft);margin:8px 0 0;line-height:1.6}
+/* 겹쳐진 이름들 */
+.epigraph{font-family:"Gowun Batang",serif;font-size:14.5px;line-height:1.9;color:var(--soft);margin:0 0 20px;padding:2px 0 2px 14px;border-left:2px solid var(--rule)}
+.thread{display:grid;grid-template-columns:minmax(88px,142px) 1fr auto;gap:5px 14px;padding:12px 0;border-bottom:1px dashed var(--rule)}
+.thread:last-child{border-bottom:0}
+.th-name{grid-column:1;grid-row:1;font-family:"Gowun Batang",serif;font-weight:700;font-size:15px;line-height:1.3;text-align:right;color:var(--ink);align-self:center}
+.th-line{grid-column:2;grid-row:1;position:relative;display:flex;align-items:center;gap:5px;min-height:20px}
+.th-line::before{content:"";position:absolute;left:2px;right:2px;top:50%;height:1px;background:var(--rule)}
+.th-count{grid-column:3;grid-row:1;font-family:"Gowun Batang",serif;font-size:21px;font-weight:700;color:var(--ink);line-height:1;align-self:center}
+.th-count em{font-style:normal;font-family:"IBM Plex Sans KR",sans-serif;font-size:11px;font-weight:400;color:var(--soft);margin-left:2px}
+.th-desc{grid-column:2/4;grid-row:2;font-size:11.5px;line-height:1.6;color:var(--soft)}
+.th-desc b{font-weight:500;color:#4A4740}
+.bead{position:relative;flex:none;width:var(--bs,13px);height:var(--bs,13px);border-radius:2px;box-shadow:0 0 0 2px var(--paper)}
+.bead.mv{border-radius:50%}
+.th-key{font-size:12px;color:var(--soft);margin:14px 0 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* 드라마 타임라인 */
+.tl-seasons{display:grid;grid-template-columns:repeat(12,1fr);font-family:"Gowun Batang",serif;font-size:10.5px;color:var(--soft);text-align:center;line-height:16px}
+.tl-months{display:grid;grid-template-columns:repeat(12,1fr);font-size:9.5px;color:var(--soft);text-align:center;line-height:15px;border-bottom:1px solid var(--rule)}
+.tl-rows{position:relative;border-bottom:1px solid var(--rule);
+ background:repeating-linear-gradient(to right,rgba(31,34,38,.05) 0 1px,transparent 1px calc(100%/12)),
+ linear-gradient(to right,rgba(47,93,140,.05) 0 16.66%,rgba(125,154,79,.055) 16.66% 41.66%,rgba(193,144,47,.065) 41.66% 66.66%,rgba(160,58,52,.05) 66.66% 91.66%,rgba(47,93,140,.05) 91.66% 100%)}
+.tl-row{position:relative;display:grid;grid-template-columns:repeat(12,1fr);align-items:center;height:23px;text-decoration:none;color:inherit;transition:opacity .18s}
+a.tl-row:hover{background:rgba(31,34,38,.045)}
+a.tl-row:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.tl-bar{grid-row:1;height:14px;margin:0 1px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.tl-label{grid-row:1;font-family:"Gowun Batang",serif;font-size:11.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.tl-label.rt{text-align:left;padding-left:6px}
+.tl-label.lf{text-align:right;padding-right:6px}
+.pb{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:3px;font-family:"IBM Plex Sans KR",sans-serif;font-size:9.5px;font-weight:700;flex:none}
+/* 카카오페이지 진열 */
+.kk-head{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--soft);margin:0 0 10px}
+.applogo{width:17px;height:17px;border-radius:4px;flex:none;display:block}
+.kk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kk{position:relative;display:flex;gap:11px;align-items:center;padding:12px 26px 12px 0;background:var(--paper2);border-radius:8px;text-decoration:none;color:var(--ink);overflow:hidden;transition:transform .15s,background .15s,box-shadow .15s}
+.kk::before{content:"";width:6px;align-self:stretch;background:var(--kind);border-radius:8px 0 0 8px;flex:none}
+.kk::after{content:"\2192";position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--off);transition:transform .15s,color .15s}
+.kk:hover{transform:translateY(-2px);background:#fff;box-shadow:0 2px 0 var(--rule)}
+.kk:hover::after{color:var(--kind);transform:translateY(-50%) translateX(3px)}
+.kk-t{font-family:"Gowun Batang",serif;font-size:14px;font-weight:700;line-height:1.35}
+.kk-k{display:block;font-family:"IBM Plex Sans KR",sans-serif;font-size:10.5px;font-weight:400;color:var(--kind);margin-top:2px;letter-spacing:-.02em}
+@media (max-width:520px){.spines{min-height:76px}.kk-grid{grid-template-columns:1fr}
+.thread{grid-template-columns:1fr auto;row-gap:7px;column-gap:10px}
+.th-name{text-align:left;grid-column:1;grid-row:1}
+.th-count{grid-column:2;grid-row:1}
+.th-line{grid-column:1/-1;grid-row:2}
+.th-desc{grid-column:1/-1;grid-row:3}
+.tl-label{font-size:10.5px}.tl-row{height:21px}
+.stats{gap:4px}.mb{width:5px}.mlab{font-size:10.5px}}
+</style></head><body><div class="wrap">
+
+<header>
+<h1>계절의 서가, 나의 기록</h1>
+<p class="kicker" id="kicker"></p>
+</header>
+
+<section>
+<div class="year-head"><h2>2026</h2><span id="y2026sum"></span></div>
+<div class="sec-head"><p><strong class="sec-word">서가</strong> · 책등 하나 = 책 한 권, 영화 한 편. 높이 = 쪽수, 러닝타임.</p></div>
+<div id="shelf2026"></div>
+<p class="hint">책등을 누르면 아래에 작품 정보가 열립니다.</p>
+<div id="stats2026"></div>
+<div id="days2026"></div>
+<div class="sec-head" style="margin-top:34px"><p><strong class="sec-word">겹쳐진 이름들</strong> · 한 번으로 끝나지 않은 작품과 작가.</p></div>
+<p class="epigraph">어떤 이름은 한 번으로 끝나지 않았다.<br>같은 문장을 두 번 읽고, 같은 장면 앞에 다섯 번 앉았다.</p>
+<div id="threads2026"></div>
+<p class="th-key" id="key2026"></p>
+<div class="sec-head" style="margin-top:34px"><p><strong class="sec-word">드라마</strong> · 그 계절, 내가 좋아했던 드라마</p></div>
+<div id="drama2026"></div>
+</section>
+
+<section>
+<div class="year-head"><h2>2025</h2><span id="y2025sum"></span></div>
+<div class="sec-head"><p><strong class="sec-word">서가</strong> · 지난해에 지나온 계절들.</p></div>
+<div id="shelf2025"></div>
+<p class="hint">책등을 누르면 아래에 작품 정보가 열립니다.</p>
+<div id="stats2025"></div>
+<div id="days2025"></div>
+<div class="sec-head" style="margin-top:34px"><p><strong class="sec-word">겹쳐진 이름들</strong> · 그해 두 번 이상 만난 이름.</p></div>
+<div id="threads2025"></div>
+<p class="th-key" id="key2025"></p>
+<div class="sec-head" style="margin-top:34px"><p><strong class="sec-word">드라마</strong> · 그 계절, 내가 좋아했던 드라마</p></div>
+<div id="drama2025"></div>
+</section>
+
+<section>
+<div class="sec-head"><p><strong class="sec-word">웹툰·웹소설·만화책</strong> · 작품을 누르면 연재 페이지로 이동합니다.</p></div>
+<p class="kk-head" id="kkHead"></p>
+<div class="kk-grid" id="webMemo"></div>
+</section>
+
+</div>
+<script>
+const DRAMAS=[
+["언더커버 미쓰홍", 2026, 1, 2026, 2, "넷플릭스", "https://namu.wiki/w/%EC%96%B8%EB%8D%94%EC%BB%A4%EB%B2%84%20%EB%AF%B8%EC%93%B0%ED%99%8D"],
+["판사 이한영", 2026, 1, 2026, 2, "웨이브", "https://namu.wiki/w/%ED%8C%90%EC%82%AC%20%EC%9D%B4%ED%95%9C%EC%98%81(%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["레이디 두아", 2026, 2, 2026, 2, "넷플릭스", "https://namu.wiki/w/%EB%A0%88%EC%9D%B4%EB%94%94%20%EB%91%90%EC%95%84"],
+["월간남친", 2026, 3, 2026, 3, "넷플릭스", "https://namu.wiki/w/%EC%9B%94%EA%B0%84%EB%82%A8%EC%B9%9C"],
+["신이랑 법률사무소", 2026, 3, 2026, 4, "넷플릭스", "https://namu.wiki/w/%EC%8B%A0%EC%9D%B4%EB%9E%91%20%EB%B2%95%EB%A5%A0%EC%82%AC%EB%AC%B4%EC%86%8C"],
+["기리고", 2026, 4, 2026, 4, "넷플릭스", "https://namu.wiki/w/%EA%B8%B0%EB%A6%AC%EA%B3%A0"],
+["유미의 세포들 3", 2026, 4, 2026, 5, "티빙", "https://namu.wiki/w/%EC%9C%A0%EB%AF%B8%EC%9D%98%20%EC%84%B8%ED%8F%AC%EB%93%A4"],
+["취사병 전설이 되다", 2026, 5, 2026, 5, "티빙", "https://namu.wiki/w/%EC%B7%A8%EC%82%AC%EB%B3%91%20%EC%A0%84%EC%84%A4%EC%9D%B4%20%EB%90%98%EB%8B%A4(%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["멋진 신세계", 2026, 5, 2026, 6, "넷플릭스", "https://namu.wiki/w/%EB%A9%8B%EC%A7%84%20%EC%8B%A0%EC%84%B8%EA%B3%84"],
+["맨 끝줄 소년", 2026, 6, 2026, 6, "넷플릭스", "https://namu.wiki/w/%EB%A7%A8%20%EB%81%9D%EC%A4%84%20%EC%86%8C%EB%85%84(%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["신입사원 강회장", 2026, 6, 2026, 6, "티빙", "https://namu.wiki/w/%EC%8B%A0%EC%9E%85%EC%82%AC%EC%9B%90%20%EA%B0%95%ED%9A%8C%EC%9E%A5(%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["가스인간", 2026, 7, 2026, 7, "넷플릭스", "https://namu.wiki/w/가스인간"],
+["아파트", 2026, 7, 2026, 7, "넷플릭스", "https://namu.wiki/w/%EC%95%84%ED%8C%8C%ED%8A%B8(JTBC)"],
+["들쥐", 2026, 8, 2026, 8, "넷플릭스", "https://namu.wiki/w/%EB%93%A4%EC%A5%90(%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["재벌X형사2", 2026, 8, 2026, 9, "Disney+", "https://namu.wiki/w/%EC%9E%AC%EB%B2%8CX%ED%98%95%EC%82%AC2"],
+["옥씨부인전", 2025, 1, 2025, 1, "티빙", "https://namu.wiki/w/옥씨부인전"],
+["중증외상센터", 2025, 1, 2025, 1, "넷플릭스", "https://namu.wiki/w/%EC%A4%91%EC%A6%9D%EC%99%B8%EC%83%81%EC%84%BC%ED%84%B0(%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["나의 완벽한 비서", 2025, 1, 2025, 2, "넷플릭스", "https://namu.wiki/w/나의_완벽한_비서"],
+["스터디그룹", 2025, 1, 2025, 3, "티빙", "https://namu.wiki/w/%EC%8A%A4%ED%84%B0%EB%94%94%EA%B7%B8%EB%A3%B9(%EB%93%9C%EB%9D%BC%EB%A7%88%20%EC%8B%9C%EC%A6%8C%201)?from=%EC%8A%A4%ED%84%B0%EB%94%94%EA%B7%B8%EB%A3%B9%28%EB%93%9C%EB%9D%BC%EB%A7%88%29"],
+["선의의 경쟁", 2025, 2, 2025, 3, "넷플릭스", "https://namu.wiki/w/%EC%84%A0%EC%9D%98%EC%9D%98_%EA%B2%BD%EC%9F%81"],
+["핫스팟: 우주인 출몰 주의!", 2025, 2, 2025, 3, "넷플릭스", "https://namu.wiki/w/핫스팟:%20우주인%20출몰%20주의!"],
+["보물섬", 2025, 2, 2025, 4, "Disney+", "https://namu.wiki/w/%EB%B3%B4%EB%AC%BC%EC%84%AC(%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["가공OL일기", 2025, 3, 2025, 3, "웨이브", "https://namu.wiki/w/가공OL일기"],
+["그렇게 사건 현장이 되어 버렸다", 2025, 3, 2025, 3, "넷플릭스", "https://namu.wiki/w/%EA%B7%B8%EB%A0%87%EA%B2%8C%20%EC%82%AC%EA%B1%B4%20%ED%98%84%EC%9E%A5%EC%9D%B4%20%EB%90%98%EC%96%B4%20%EB%B2%84%EB%A0%B8%EB%8B%A4"],
+["브러쉬 업 라이프", 2025, 3, 2025, 3, "웨이브", "https://namu.wiki/w/브러쉬%20업%20라이프"],
+["협상의 기술", 2025, 3, 2025, 4, "티빙", "https://namu.wiki/w/%ED%98%91%EC%83%81%EC%9D%98%20%EA%B8%B0%EC%88%A0"],
+["배드 인플루언스", 2025, 4, 2025, 4, "넷플릭스", "https://www.netflix.com/kr/title/81728889"],
+["악연", 2025, 4, 2025, 4, "넷플릭스", "https://namu.wiki/w/%EC%95%85%EC%97%B0(2025%EB%85%84%20%EB%93%9C%EB%9D%BC%EB%A7%88)"],
+["약한영웅 시즌2", 2025, 4, 2025, 4, "넷플릭스", "https://namu.wiki/w/약한영웅%20Class%202"],
+["입스", 2025, 4, 2025, 4, "티빙", "https://www.tving.com/contents/P001764101"],
+["천국보다 아름다운", 2025, 4, 2025, 5, "넷플릭스", "https://namu.wiki/w/%EC%B2%9C%EA%B5%AD%EB%B3%B4%EB%8B%A4%20%EC%95%84%EB%A6%84%EB%8B%A4%EC%9A%B4"],
+["당신의 맛", 2025, 5, 2025, 6, "넷플릭스", "https://namu.wiki/w/%EB%8B%B9%EC%8B%A0%EC%9D%98%20%EB%A7%9B"],
+["미지의 서울", 2025, 5, 2025, 6, "넷플릭스", "https://namu.wiki/w/%EB%AF%B8%EC%A7%80%EC%9D%98%20%EC%84%9C%EC%9A%B8"],
+["오징어게임3", 2025, 6, 2025, 6, "넷플릭스", "https://namu.wiki/w/오징어%20게임%28시즌%203%29"],
+["애마", 2025, 8, 2025, 8, "넷플릭스", "https://namu.wiki/w/애마%28드라마%29"],
+["에스콰이어", 2025, 8, 2025, 9, "넷플릭스", "https://namu.wiki/w/%EC%97%90%EC%8A%A4%EC%BD%B0%EC%9D%B4%EC%96%B4:%20%EB%B3%80%ED%98%B8%EC%82%AC%EB%A5%BC%20%EA%BF%88%EA%BE%B8%EB%8A%94%20%EB%B3%80%ED%98%B8%EC%82%AC%EB%93%A4"],
+["폭군의 셰프", 2025, 8, 2025, 9, "넷플릭스", "https://namu.wiki/w/폭군의%20셰프"],
+["다 이루어질지니", 2025, 10, 2025, 10, "넷플릭스", "https://namu.wiki/w/다%20이루어질지니"],
+["태풍상사", 2025, 10, 2025, 11, "넷플릭스", "https://namu.wiki/w/태풍상사"],
+["모범택시3", 2025, 11, 2025, 12, "넷플릭스", "https://namu.wiki/w/%EB%AA%A8%EB%B2%94%ED%83%9D%EC%8B%9C%203"],
+["조각도시", 2025, 11, 2025, 12, "Disney+", "https://namu.wiki/w/조각도시"],
+["친애하는 X", 2025, 11, 2025, 12, "티빙", "https://namu.wiki/w/%EC%B9%9C%EC%95%A0%ED%95%98%EB%8A%94%20X(%EB%93%9C%EB%9D%BC%EB%A7%88)"]
+];
+const BOOKS=[
+["book", "2025.01.07", "망내인 - 네트워크에 사로잡힌 사람들", "찬호께이", 712, "중국어", 2017, "종이책", "대여", 5],
+["book", "2025.01.07", "새들이 남쪽으로 가는 날", "리사 리드센", 460, "스웨덴어", 2024, "종이책", "대여", 4],
+["book", "2025.01.10", "소년이 온다", "한강", 216, "한국어", 2014, "종이책", "대여", 3],
+["book", "2025.01.20", "13.67", "찬호께이", 680, "중국어", 2014, "종이책", "대여", 5],
+["book", "2025.01.20", "마술 피리 - 동화 속 범죄사건 추리 파일", "찬호께이", 600, "중국어", 2020, "종이책", "대여", 5],
+["book", "2025.01.24", "카타리나 블룸의 잃어버린 명예", "하인리히 뵐", 170, "독일어", 1974, "종이책", "대여", 3],
+["book", "2025.02.07", "모순", "양귀자", 307, "한국어", 1998, "종이책", "대여", 5],
+["book", "2025.02.10", "초저출산은 왜 생겼을까? - 복지 대책의 틈을 채울 7가지 새로운 모색", "조영태", 240, "한국어", 2024, "종이책", "대여", 3],
+["book", "2025.02.21", "역사의 쓸모", "최태성", 304, "한국어", 2019, "전자책", "대여", 4],
+["book", "2025.04.04", "아내를 모자로 착각한 남자", "올리버 색스", 396, "영어", 1985, "전자책", "대여", 3],
+["book", "2025.04.18", "네루다의 우편배달부", "안토니오 스카르메타", 184, "스페인어", 1985, "전자책", "대여", 2],
+["book", "2025.05.30", "침묵의 봄", "레이첼 카슨", 504, "영어", 1962, "종이책", "대여", 5],
+["book", "2025.06.13", "맥베스", "윌리엄 셰익스피어", 160, "영어", 1606, "종이책", "대여", 5],
+["book", "2025.06.27", "당신 인생의 이야기", "테드 창", 448, "영어", 2002, "종이책", "대여", 5],
+["book", "2025.07.11", "구르브 연락 없다", "에두아르도 멘도사", 186, "스페인어", 1991, "전자책", "대여", 3],
+["book", "2025.07.25", "새의 선물", "은희경", 440, "한국어", 1995, "전자책", "대여", 5],
+["book", "2025.08.08", "나를 보내지 마", "가즈오 이시구로", 500, "영어", 2005, "종이책", "구매", 4],
+["book", "2025.09.05", "파리대왕", "윌리엄 골딩", 328, "영어", 1954, "전자책", "대여", 3],
+["book", "2025.10.17", "경험의 멸종", "크리스틴 로젠", 364, "영어", 2024, "종이책", "구매", 5],
+["book", "2025.10.31", "소망 없는 불행", "페터 한트케", 204, "독일어", 1972, "종이책", "대여", 3],
+["book", "2025.11.14", "우리가 빛의 속도로 갈 수 없다면", "김초엽", 330, "한국어", 2019, "전자책", "대여", 4],
+["book", "2025.11.28", "넥서스", "유발 하라리", 684, "영어", 2024, "종이책", "구매", 3],
+["book", "2025.12.04", "프라이스 킹!!!", "김홍", 263, "한국어", 2024, "종이책", "대여", 4],
+["book", "2025.12.04", "엉엉", "김홍", 230, "한국어", 2022, "종이책", "대여", 4],
+["book", "2025.12.04", "스모킹 오레오", "김홍", 259, "한국어", 2020, "종이책", "대여", 4],
+["book", "2025.12.04", "우리가 당신을 찾아갈 것이다", "김홍", 252, "한국어", 2021, "종이책", "대여", 4],
+["book", "2025.12.05", "곰-사냥-인간", "김홍", 106, "한국어", 2025, "종이책", "대여", 4],
+["book", "2025.12.05", "여기서 울지 마세요", "김홍", 344, "한국어", 2024, "종이책", "구매", 5],
+["book", "2025.12.12", "말뚝들", "김홍", 312, "한국어", 2025, "종이책", "구매", 5],
+["book", "2025.12.26", "설국", "가와바타 야스나리", 176, "일본어", 1937, "종이책", "대여", 3],
+["book", "2026.01.09", "그녀를 지키다", "장바티스트 앙드레아", 632, "프랑스어", 2023, "전자책", "대여", 5],
+["book", "2026.01.23", "축복받은 집", "줌파 라히리", 320, "영어", 1999, "전자책", "대여", 3],
+["book", "2026.02.06", "나의 완벽한 장례식", "조현선", 296, "한국어", 2026, "종이책", "대여", 3],
+["book", "2026.02.13", "옐로페이스", "R.F. 쿠앙", 444, "영어", 2023, "종이책", "구매", 5],
+["book", "2026.02.25", "부처님 말씀대로 살아보니 - 인생이 가벼워지는 15가지 불교 수업", "토니 페르난도", 318, "영어", 2024, "종이책", "대여", 3],
+["book", "2026.02.25", "모성", "미나토 가나에", 336, "일본어", 2012, "종이책", "대여", 4],
+["book", "2026.03.05", "잃어버린 얼굴", "사쿠라다 도모야", 360, "일본어", 2025, "종이책", "대여", 3],
+["book", "2026.03.05", "자녀 성공학", "오두환", 324, "한국어", 2026, "종이책", "대여", 2],
+["book", "2026.03.13", "두 사람의 인터내셔널", "김기태", 336, "한국어", 2024, "전자책", "대여", 4],
+["book", "2026.03.27", "순수의 시대", "이디스 워튼", 457, "영어", 1920, "전자책", "대여", 3],
+["book", "2026.03.28", "Project Hail Mary", "앤디 위어", 496, "영어", 2021, "종이책", "구매", 5],
+["book", "2026.03.28", "프로젝트 헤일메리", "앤디 위어", 692, "영어", 2021, "전자책", "구매", 5],
+["book", "2026.03.30", "중고신입 차윤슬, 이야기를 시작합니다", "김지혜", 284, "한국어", 2026, "종이책", "대여", 3],
+["book", "2026.04.04", "수확자", "닐 셔스터먼", 512, "영어", 2016, "종이책", "구매", 5],
+["book", "2026.04.06", "1939년 명성아파트", "무경", 352, "한국어", 2026, "종이책", "대여", 4],
+["book", "2026.04.10", "불안", "알랭 드 보통", 372, "영어", 2004, "종이책", "대여", 4],
+["book", "2026.04.13", "부디 당신이 무사히 타락하기를", "무경", 240, "한국어", 2025, "종이책", "대여", 3],
+["book", "2026.04.24", "꾸뻬 씨의 행복 여행", "프랑수아 를로르", 220, "프랑스어", 2002, "전자책", "대여", 3],
+["book", "2026.05.10", "끝까지 해내는 마음은 어떻게 탄생하는가", "웬디 그롤닉", 376, "영어", 2026, "종이책", "대여", 2],
+["book", "2026.05.22", "종이 동물원", "켄 리우", 568, "영어", 2016, "종이책", "구매", 5],
+["book", "2026.06.07", "박곰희 연금 부자 수업", "박곰희", 296, "한국어", 2025, "종이책", "구매", 3],
+["book", "2026.07.10", "내가 틀릴 수도 있습니다", "비욘 나티코 린데블라드", 320, "스웨덴어", 2020, "전자책", "대여", 3],
+["book", "2026.07.24", "달걀의 온기", "김혜진", 256, "한국어", 2024, "전자책", "대여", 4],
+["book", "2026.07.31", "오디세이아를 한 번도 안 읽어 볼 수는 없잖아", "Team.Story G", 312, "한국어", 2026, "종이책", "구매", 5],
+["book", "2026.08.14", "편의점 인간", "무라타 사야카", 204, "일본어", 2016, "전자책", "대여", 3],
+["book", "2026.08.19", "프래니와 주이", "제롬 데이비드 샐린저", 254, "영어", 1955, "종이책", "대여", 3],
+["book", "2026.08.26", "샐린저 평전", "케니스 슬라웬스키", 602, "영어", 2014, "종이책", "대여", 3],
+["book", "2026.08.28", "체호프 단편선", "안톤 체호프", 206, "러시아어", 1883, "전자책", "대여", 3],
+["book", "2026.08.30", "목수들아, 대들보를 높이 올려라", "제롬 데이비드 샐린저", 278, "영어", 1963, "종이책", "대여", 5],
+["book", "2026.09.04", "빵충 사육 준수 사항", "김혜영", 388, "한국어", 2026, "전자책", "대여", 5],
+["book", "2026.09.05", "순례주택", "유은실", 256, "한국어", 2021, "전자책", "대여", 5],
+["book", "2026.09.09", "독학이라는 세계", "시라토리 하루히코", 363, "일본어", 2012, "전자책", "대여", 5],
+["book", "2026.09.11", "여자아이 기억", "아니 에르노", 220, "프랑스어", 2016, "종이책", "대여", 1],
+["book", "2026.09.18", "카프네", "아베 아키코", 364, "일본어", 2024, "종이책", "대여", 5]
+];
+const MOVIES=[
+["movie", "2025.01.12", "하얼빈", "우민호", "하얼빈", 114, "한국어", "판교CGV SCREENX · 무대인사", "특", 4, 1],
+["movie", "2025.01.18", "위키드", "존 추", "Wicked", 160, "영어", "판교CGV 1관", "일반", 5, 1],
+["movie", "2025.02.15", "캡틴 아메리카: 브레이브 뉴 월드", "줄리어스 오나", "Captain America: Brave New World", 118, "영어", "판교CGV 1관", "일반", 3, 1],
+["movie", "2025.03.03", "미키 17", "봉준호", "Mickey 17", 137, "영어", "판교CGV 1관", "일반", 5, 1],
+["movie", "2025.04.01", "침입자들의 만찬", "미즈노 이타루", "侵入者たちの晩餐", 114, "일본어", "넷플릭스", "OTT", 3, 1],
+["movie", "2025.04.26", "마인크래프트 무비", "자레드 헤스", "A Minecraft Movie", 101, "영어", "판교CGV IMAX", "특", 5, 1],
+["movie", "2025.05.30", "미션 임파서블: 파이널 레코닝", "크리스토퍼 맥쿼리", "Mission: Impossible – The Final Reckoning", 179, "영어", "판교CGV 1관", "일반", 3, 1],
+["movie", "2025.06.03", "릴로 & 스티치", "딘 플라이셔 캠프", "Lilo & Stitch", 108, "영어", "판교CGV SCREENX", "특", 3, 1],
+["movie", "2025.07.13", "슈퍼맨", "제임스 건", "Superman", 139, "영어", "판교CGV 1관", "일반", 3, 1],
+["movie", "2025.07.25", "킹 오브 킹스", "장성호", "The King of Kings", 101, "한국어", "판교CGV 4관", "일반", 3, 1],
+["movie", "2025.11.01", "케이팝 데몬 헌터스", "매기 강", "KPop Demon Hunters", 100, "영어", "판교CGV 4관", "일반", 4, 1],
+["movie", "2025.11.28", "위키드: 포 굿", "존 추", "Wicked: For Good", 137, "영어", "판교CGV IMAX", "특", 4, 1],
+["movie", "2025.12.09", "주토피아 2", "재러드 부시", "Zootopia 2", 108, "영어", "판교CGV IMAX", "특", 4, 1],
+["movie", "2026.02.04", "왕과 사는 남자", "장항준", "왕과 사는 남자", 117, "한국어", "판교CGV 1관", "일반", 4, 1],
+["movie", "2026.03.02", "왕과 사는 남자", "장항준", "왕과 사는 남자", 117, "한국어", "판교CGV 1관", "일반", 4, 2],
+["movie", "2026.03.06", "워 머신: 전쟁 기계", "데이비드 미쇼", "War Machine", 122, "영어", "넷플릭스", "OTT", 3, 1],
+["movie", "2026.03.21", "프로젝트 헤일메리", "필 로드 & 크리스토퍼 밀러", "Project Hail Mary", 156, "영어", "판교CGV IMAX", "특", 5, 1],
+["movie", "2026.03.26", "프로젝트 헤일메리", "필 로드 & 크리스토퍼 밀러", "Project Hail Mary", 156, "영어", "판교CGV IMAX", "특", 5, 2],
+["movie", "2026.03.28", "프로젝트 헤일메리", "필 로드 & 크리스토퍼 밀러", "Project Hail Mary", 156, "영어", "판교CGV IMAX", "특", 5, 3],
+["movie", "2026.03.31", "프로젝트 헤일메리", "필 로드 & 크리스토퍼 밀러", "Project Hail Mary", 156, "영어", "판교CGV IMAX", "특", 5, 4],
+["movie", "2026.04.08", "프로젝트 헤일메리", "필 로드 & 크리스토퍼 밀러", "Project Hail Mary", 156, "영어", "판교CGV IMAX", "특", 5, 5],
+["movie", "2026.04.29", "악마는 프라다를 입는다 2", "데이비드 프랭클", "The Devil Wears Prada 2", 119, "영어", "판교CGV 1관", "일반", 3, 1],
+["movie", "2026.06.02", "마이클", "앤트완 퓨콰", "Michael", 127, "영어", "판교CGV IMAX", "특", 3, 1],
+["movie", "2026.06.13", "만달로리안과 그로구", "존 패브로", "The Mandalorian and Grogu", 132, "영어", "판교CGV 4DX", "특", 4, 1],
+["movie", "2026.06.13", "군체", "연상호", "군체", 122, "한국어", "판교CGV 3관", "일반", 3, 1],
+["movie", "2026.06.19", "남편들", "박규태", "남편들", 142, "한국어", "넷플릭스", "OTT", 3, 1],
+["movie", "2026.07.17", "미니언즈&몬스터즈", "피에르 코팽", "Minions & Monsters", 90, "영어", "판교CGV 1관", "일반", 3, 1],
+["movie", "2026.07.18", "호프", "나홍진", "호프", 156, "한국어", "판교CGV IMAX · 무대인사", "특", 5, 1],
+["movie", "2026.07.21", "호프", "나홍진", "호프", 156, "한국어", "판교CGV 4DX", "특", 5, 2],
+["movie", "2026.07.29", "스파이더맨: 브랜드 뉴 데이", "데스틴 대니얼 크레턴", "Spider-Man: Brand New Day", 145, "영어", "판교CGV IMAX", "특", 5, 1],
+["movie", "2026.07.30", "스파이더맨: 홈커밍", "존 왓츠", "Spider-Man: Homecoming", 133, "영어", "디즈니플러스", "OTT", 5, 1],
+["movie", "2026.07.30", "스파이더맨: 파 프롬 홈", "존 왓츠", "Spider-Man: Far From Home", 129, "영어", "디즈니플러스", "OTT", 5, 1],
+["movie", "2026.07.30", "스파이더맨: 노 웨이 홈", "존 왓츠", "Spider-Man: No Way Home", 148, "영어", "디즈니플러스", "OTT", 5, 1],
+["movie", "2026.08.01", "스파이더맨: 브랜드 뉴 데이", "데스틴 대니얼 크레턴", "Spider-Man: Brand New Day", 145, "영어", "판교CGV IMAX", "특", 5, 2],
+["movie", "2026.08.05", "오디세이", "크리스토퍼 놀란", "The Odyssey", 172, "영어", "판교CGV IMAX", "특", 5, 1],
+["movie", "2026.08.19", "오디세이", "크리스토퍼 놀란", "The Odyssey", 172, "영어", "판교CGV IMAX", "특", 5, 2],
+["movie", "2026.08.25", "호밀밭의 반항아", "대니 스트롱", "Rebel in the Rye", 109, "영어", "넷플릭스", "OTT", 4, 1],
+["movie", "2026.08.25", "로얄 테넌바움", "웨스 앤더슨", "The Royal Tenenbaums", 109, "영어", "디즈니플러스", "OTT", 5, 1],
+["movie", "2026.08.25", "샐린저", "셰인 살레르노", "Salinger", 128, "영어", "웨이브", "OTT", 3, 1],
+["movie", "2026.08.26", "마이 뉴욕 다이어리", "필리프 팔라도", "My Salinger Year", 101, "영어", "웨이브", "OTT", 3, 1],
+["movie", "2026.08.26", "스켈레톤 트윈스", "크레이그 존슨", "The Skeleton Twins", 93, "영어", "애플TV", "OTT", 4, 1],
+["movie", "2026.09.01", "오크 스트리트의 마지막 날", "데이빗 로버트 밋첼", "The End of Oak Street", 99, "영어", "신세계경기CGV 4관", "일반", 3, 1],
+["movie", "2026.09.10", "더 드라마", "크리스토페르 보르글리", "The Drama", 106, "영어", "신세계경기CGV 4관", "일반", 4, 1]
+];
+
+const LANG={영어:'--en',한국어:'--ko',독일어:'--de',프랑스어:'--fr',일본어:'--ja',스페인어:'--es',러시아어:'--ru',중국어:'--zh',스웨덴어:'--sv',기타:'--etc'};
+const FORMAT={전자책:'--ebook',종이책:'--paperbook'};
+const OWN={구매:'--buy',대여:'--rent'};
+const THEATER={특:'--special',일반:'--normal',OTT:'--ott'};
+const RATING={1:'--r1',2:'--r2',3:'--r3',4:'--r4',5:'--r5'};
+const V=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+const lum=x=>{let s=String(x).trim().replace('#','');if(s.length===3)s=s.split('').map(c=>c+c).join('');
+ const f=i=>{const v=parseInt(s.substr(i,2),16)/255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);};
+ return .2126*f(0)+.7152*f(2)+.0722*f(4);};
+const markColor=c=>lum(c)>.45?'#1F2226':'#FFFFFF';
+const theaterLabel=k=>k==='특'?'특별관':k==='일반'?'일반관':k;
+const minsToPages=m=>m?Math.max(40,Math.round(2.5*(+m)-100)):100;
+const seasonKeyOf=d=>{const[y,m]=d.split('.').map(Number); if(m>=3&&m<=5)return y*10+1; if(m>=6&&m<=8)return y*10+2; if(m>=9&&m<=11)return y*10+3; if(m===12)return (y+1)*10+0; return y*10+0;};
+const seasonLabelOf=k=>{const y=Math.floor(k/10),s=k%10; if(s===1)return y+' 봄'; if(s===2)return y+' 여름'; if(s===3)return y+' 가을'; return (y-1)+'-'+y+' 겨울';};
+const B=BOOKS.map((r,i)=>({i,type:'book',date:r[1],title:r[2],author:r[3],pages:r[4],lang:r[5],pub:r[6],format:r[7],own:r[8],rating:r[9],seasonKey:seasonKeyOf(r[1])}));
+const M=MOVIES.map((r,i)=>({i:B.length+i,type:'movie',date:r[1],title:r[2],director:r[3],original:r[4],runtime:r[5],lang:r[6],theater:r[7],theaterType:r[8]||'일반',rating:r[9],viewCount:r[10]||1,pages:minsToPages(r[5]),seasonKey:seasonKeyOf(r[1])}));
+const ALL=[...B,...M].sort((a,b)=>a.date.localeCompare(b.date));
+const shelfYear=b=>Math.floor(b.seasonKey/10);
+const PMIN=Math.min(...ALL.map(b=>b.pages)),PMAX=Math.max(...ALL.map(b=>b.pages));
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+
+(function(){
+ const fmt=d=>{const[y,m,dd]=d.split('.').map(Number);return y+'년 '+m+'월 '+dd+'일';};
+ document.getElementById('kicker').innerHTML=
+  '<span>'+fmt(ALL[0].date)+' — '+fmt(ALL[ALL.length-1].date)+'</span><span class="dot"></span>'
+  +'<span><b>'+B.length+'</b>권의 책</span><span class="dot"></span>'
+  +'<span><b>'+new Set(M.map(m=>m.title)).size+'</b>편의 영화</span><span class="dot"></span>'
+  +'<span><b>'+DRAMAS.length+'</b>편의 드라마</span>';
+})();
+
+// 서가 줄 묶기: 2025는 '겨울·봄' / '여름·가을' 두 줄, 그 외는 계절 그대로
+function shelfGroups(year,items){
+ const keys=[...new Set(items.map(b=>b.seasonKey))].sort((a,b)=>b-a);
+ if(year!==2025)return keys.map(k=>({label:seasonLabelOf(k),keys:[k]}));
+ const win=year*10+0,spr=year*10+1,sum=year*10+2,aut=year*10+3;
+ return [{label:year+' 여름—가을',keys:[sum,aut]},{label:(year-1)+'-'+year+' 겨울—봄',keys:[win,spr]}]
+  .filter(g=>g.keys.some(k=>keys.includes(k)));
+}
+
+function makeShelf(hostId,year){
+ const host=document.getElementById(hostId);
+ const items=ALL.filter(b=>shelfYear(b)===year);
+ if(!items.length)return;
+ const Bx=items.filter(b=>b.type==='book'),Mx=items.filter(b=>b.type==='movie');
+ let MODE='lang',FILTER=null,cur=null;
+ const modes=document.createElement('div'); modes.className='modes'; modes.setAttribute('role','group'); modes.setAttribute('aria-label',year+' 색상 기준');
+ modes.innerHTML=[['lang','원어'],['format','전자책·종이책'],['own','구매·대여'],['theater','영화관·OTT'],['rating','별점']]
+  .map(([k,l],i)=>'<button class="mode" type="button" data-mode="'+k+'" aria-pressed="'+(i===0)+'">'+l+'</button>').join('');
+ const legend=document.createElement('div'); legend.className='legend';
+ const fhint=document.createElement('p'); fhint.className='fhint';
+ const box=document.createElement('div');
+ host.append(modes,legend,fhint,box);
+
+ const keyOf=b=>{
+  if(MODE==='lang')return b.lang||'미입력';
+  if(MODE==='theater')return b.type==='movie'?(b.theaterType||'일반'):'해당 없음';
+  if(MODE==='rating')return String(b.rating||'미입력');
+  if(b.type==='movie')return '해당 없음';
+  return MODE==='format'?b.format:b.own;};
+ const baseColor=b=>{
+  if(MODE==='lang')return b.lang&&LANG[b.lang]?V(LANG[b.lang]):'#BFBBB2';
+  if(MODE==='theater')return b.type==='movie'?V(THEATER[b.theaterType||'일반']):'#BFBBB2';
+  if(MODE==='rating')return b.rating&&RATING[b.rating]?V(RATING[b.rating]):'#BFBBB2';
+  if(b.type==='movie')return '#BFBBB2';
+  return MODE==='format'?V(FORMAT[b.format]):V(OWN[b.own]);};
+ const color=b=>(FILTER&&keyOf(b)!==FILTER)?'#E6E4DF':baseColor(b);
+
+ const groups=shelfGroups(year,items);
+ const COLS=Math.max(...groups.map(g=>items.filter(b=>g.keys.includes(b.seasonKey)).length),12);
+ groups.forEach((g,gi)=>{
+  const slug=hostId+'-g'+gi, list=items.filter(b=>g.keys.includes(b.seasonKey)).sort((a,b)=>a.date.localeCompare(b.date));
+  if(!list.length)return;
+  const bs=list.filter(b=>b.type==='book'), ms=list.filter(b=>b.type==='movie');
+  const pg=bs.reduce((s,b)=>s+b.pages,0);
+  const span=list[0].date.slice(0,7).replace('.','.')+' — '+list[list.length-1].date.slice(0,7);
+  const row=document.createElement('div'); row.className='shelf-row';
+  row.innerHTML='<div class="shelf-meta"><span class="shelf-year">'+g.label+'</span><span class="shelf-count">'
+   +bs.length+'권 · '+pg.toLocaleString()+'쪽 · 영화 '+new Set(ms.map(m=>m.title)).size+'편 · '+span+'</span></div>';
+  const sp=document.createElement('div'); sp.className='spines'; sp.style.gridTemplateColumns='repeat('+COLS+',1fr)';
+  list.forEach(b=>{const el=document.createElement('button');
+   el.className=b.type==='book'?'spine':'spine tile'; el.type='button'; el.dataset.i=b.i; el.dataset.row=slug;
+   el.style.height=(30+(b.pages-PMIN)/((PMAX-PMIN)||1)*58).toFixed(1)+'px';
+   el.setAttribute('aria-pressed','false');
+   el.setAttribute('aria-label',b.title+(b.type==='book'?' — '+b.author+', '+b.pages+'쪽':' (영화)'));
+   el.addEventListener('click',()=>sel(b,el));
+   el.addEventListener('keydown',ev=>{if(ev.key==='ArrowRight'||ev.key==='ArrowLeft'){ev.preventDefault();step(el,ev.key==='ArrowRight'?1:-1);}});
+   sp.appendChild(el);});
+  row.appendChild(sp);
+  const ro=document.createElement('div'); ro.className='readout'; ro.id='ro-'+slug; ro.setAttribute('aria-live','polite');
+  row.appendChild(ro); box.appendChild(row);
+ });
+
+ function paint(){
+  box.querySelectorAll('.spine').forEach(el=>{const it=items.find(x=>x.i==+el.dataset.i),c=color(it);
+   el.style.background=c; if(it&&it.type==='movie')el.style.setProperty('--mk',markColor(c));});
+  let it=[];
+  if(MODE==='lang'){const ls=[...new Set(items.map(b=>b.lang||'미입력'))].sort((a,b)=>items.filter(x=>(x.lang||'미입력')===b).length-items.filter(x=>(x.lang||'미입력')===a).length);
+   it=ls.map(k=>[k+' '+items.filter(b=>(b.lang||'미입력')===k).length,(LANG[k]?V(LANG[k]):'#BFBBB2'),k]);}
+  else if(MODE==='format')it=[...Object.keys(FORMAT).filter(k=>Bx.some(b=>b.format===k)).map(k=>[k+' '+Bx.filter(b=>b.format===k).length,V(FORMAT[k]),k]),['해당 없음(영화) '+Mx.length,'#BFBBB2','해당 없음']];
+  else if(MODE==='own')it=[...Object.keys(OWN).filter(k=>Bx.some(b=>b.own===k)).map(k=>[k+' '+Bx.filter(b=>b.own===k).length,V(OWN[k]),k]),['해당 없음(영화) '+Mx.length,'#BFBBB2','해당 없음']];
+  else if(MODE==='theater')it=[...Object.keys(THEATER).filter(k=>Mx.some(b=>(b.theaterType||'일반')===k)).map(k=>[theaterLabel(k)+' '+Mx.filter(b=>(b.theaterType||'일반')===k).length,V(THEATER[k]),k]),['해당 없음(책) '+Bx.length,'#BFBBB2','해당 없음']];
+  else{const rs=[...new Set(items.map(b=>String(b.rating||'미입력')))].sort();
+   it=rs.map(k=>[(k==='미입력'?'미입력':'\u2605'.repeat(+k))+' '+items.filter(b=>String(b.rating||'미입력')===k).length,(RATING[k]?V(RATING[k]):'#BFBBB2'),k]);}
+  legend.className='legend'+(FILTER?' filtered':'');
+  legend.innerHTML=it.map(([t,c,k])=>'<button class="lg" type="button" data-k="'+esc(k)+'" aria-pressed="'+(FILTER===k)+'"><span class="sw" style="background:'+c+'"></span>'+t+'</button>').join('');
+  legend.querySelectorAll('button.lg').forEach(btn=>btn.addEventListener('click',()=>{FILTER=(FILTER===btn.dataset.k)?null:btn.dataset.k;paint();}));
+  fhint.textContent=FILTER?'\u2018'+FILTER+'\u2019만 표시 중 — 다시 누르면 전체로 돌아갑니다.':'';
+ }
+ function applyFilter(mode,key){MODE=mode;FILTER=key;
+  modes.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.mode===mode)));paint();}
+ function sel(b,el){const same=cur===el;
+  if(cur)cur.setAttribute('aria-pressed','false');
+  box.querySelectorAll('.readout').forEach(r=>{if(r.id!=='ro-'+el.dataset.row)r.classList.remove('open');});
+  const ro=document.getElementById('ro-'+el.dataset.row);
+  if(same){ro.classList.remove('open');cur=null;return;}
+  el.setAttribute('aria-pressed','true');cur=el;
+  const blank=v=>v?v:'<span class="blank">(입력 필요)</span>';
+  const stars=v=>v?'\u2605'.repeat(+v)+'\u2606'.repeat(5-v):'<span class="blank">(입력 필요)</span>';
+  const ratingTag=v=>{if(!v)return '<span class="tag">'+stars(v)+'</span>';
+   const c=V(RATING[v]);
+   return '<button class="tag" type="button" data-m="rating" data-f="'+v+'" style="background:'+c+';border-color:'+c+';color:'+(v>=4?'#fff':'#3A3428')+'">'+stars(v)+'</button>';};
+  let tg,head;
+  if(b.type==='book'){
+   head='<div class="r-title">'+b.title+'</div><div class="r-author">'+b.author+'</div>';
+   tg=['<span class="tag">'+b.pages+'쪽</span>',
+    '<button class="tag" type="button" data-m="lang" data-f="'+esc(b.lang)+'">'+b.lang+'</button>',
+    '<span class="tag">'+b.pub+'년 작</span>',
+    '<button class="tag" type="button" data-m="format" data-f="'+b.format+'">'+b.format+'</button>',
+    '<button class="tag" type="button" data-m="own" data-f="'+b.own+'">'+b.own+'</button>',ratingTag(b.rating)];
+  }else{
+   head='<div class="r-title">'+b.title+' <span class="tag">영화</span>'+(b.viewCount>1?' <span class="tag">'+b.viewCount+'회차</span>':'')
+    +'</div><div class="r-author">감독 '+blank(b.director)+' · 원작 '+blank(b.original)+'</div>';
+   tg=['<span class="tag">'+(b.runtime?b.runtime+'분':blank(''))+'</span>',
+    '<button class="tag" type="button" data-m="lang" data-f="'+esc(b.lang||'')+'">'+blank(b.lang)+'</button>',
+    '<span class="tag">'+blank(b.theater)+'</span>',
+    '<button class="tag" type="button" data-m="theater" data-f="'+b.theaterType+'">'+theaterLabel(b.theaterType)+'</button>',ratingTag(b.rating)];
+  }
+  ro.innerHTML='<div class="r-top"><span class="r-date">'+b.date+'</span>'
+   +'<span class="ronav"><button class="rnav" type="button" data-d="-1" aria-label="이전 작품">\u2039</button>'
+   +'<button class="rnav" type="button" data-d="1" aria-label="다음 작품">\u203A</button></span></div>'
+   +head+'<div class="r-tags">'+tg.join('')+'</div>';
+  ro.classList.add('open');
+  ro.querySelectorAll('button.tag').forEach(t=>t.addEventListener('click',()=>{if(t.dataset.f)applyFilter(t.dataset.m,t.dataset.f);}));
+  ro.querySelectorAll('button.rnav').forEach(n=>n.addEventListener('click',()=>step(el,+n.dataset.d)));}
+ function step(el,d){const sib=Array.from(box.querySelectorAll('.spine[data-row="'+el.dataset.row+'"]'));
+  const i=sib.indexOf(el); if(i<0)return;
+  const t=sib[(i+d+sib.length)%sib.length];
+  sel(items.find(x=>x.i==+t.dataset.i),t); t.focus();}
+ modes.querySelectorAll('.mode').forEach(btn=>btn.addEventListener('click',()=>{
+  modes.querySelectorAll('.mode').forEach(b=>b.setAttribute('aria-pressed','false'));
+  btn.setAttribute('aria-pressed','true');MODE=btn.dataset.mode;FILTER=null;paint();}));
+ paint();
+}
+
+function makeStats(hostId,year,sumId){
+ const items=ALL.filter(b=>shelfYear(b)===year);
+ if(!items.length)return;
+ const bs=items.filter(x=>x.type==='book'), ms=items.filter(x=>x.type==='movie');
+ const pages=bs.reduce((s,b)=>s+b.pages,0);
+ const uniq=new Set(ms.map(m=>m.title)).size;
+ const five=items.filter(x=>String(x.rating)==='5').length;
+ const special=ms.filter(m=>m.theaterType==='특').length;
+ const thick=bs.slice().sort((a,b)=>b.pages-a.pages)[0];
+ const cnt={}; ms.forEach(m=>cnt[m.title]=(cnt[m.title]||0)+1);
+ const most=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+ const cells=[[bs.length,'권','읽은 책'],[pages.toLocaleString(),'쪽','쌓인 쪽수'],[uniq,'편','본 영화'],[special,'회','특별관']];
+ const notes=[];
+ if(thick)notes.push('가장 두꺼웠던 책 <b>「'+thick.title+'」</b> '+thick.pages+'쪽');
+ if(most&&most[1]>1)notes.push('가장 여러 번 본 영화 <b>「'+most[0]+'」</b> '+most[1]+'회');
+ if(five)notes.push('별점 다섯 개 <b>'+five+'</b>편');
+ document.getElementById(hostId).innerHTML=
+  '<div class="stats">'+cells.map(([n,u,l])=>'<div class="stat"><b>'+n+'<i>'+u+'</i></b><span>'+l+'</span></div>').join('')+'</div>'
+  +'<p class="stat-note">'+notes.join(' · ')+'</p>';
+ const sum=document.getElementById(sumId);
+ if(sum)sum.textContent='책 '+bs.length+'권 · 영화 '+uniq+'편 · 드라마 '+DRAMAS.filter(d=>d[1]===year||d[3]===year).length+'편';
+}
+
+// 만난 날들 — 월별 막대 (책 / 영화 / 드라마)
+function makeDays(hostId,year){
+ const host=document.getElementById(hostId);
+ const items=ALL.filter(x=>+x.date.slice(0,4)===year);
+ const dr=DRAMAS.filter(d=>d[1]===year||d[3]===year);
+ if(!items.length&&!dr.length)return;
+ const bk=Array(12).fill(0),mv=Array(12).fill(0),dm=Array(12).fill(0);
+ items.forEach(x=>{const m=+x.date.slice(5,7)-1; if(x.type==='book')bk[m]++; else mv[m]++;});
+ dr.forEach(d=>{const s=(d[1]===year?d[2]:1),e=(d[3]===year?d[4]:12); for(let m=s;m<=e;m++)dm[m-1]++;});
+ const tot=bk.map((n,i)=>n+mv[i]+dm[i]);
+ const max=Math.max(1,...tot), U=96/max;
+ const lastM=Math.max(1,...items.map(x=>+x.date.slice(5,7)),...dr.map(d=>d[3]===year?d[4]:12));
+ const empty=tot.slice(0,lastM).filter(n=>n===0).length;
+ const top=tot.indexOf(max), sum=tot.reduce((a,b)=>a+b,0);
+ const bar=(n,c)=>'<span class="mb '+c+'" style="height:'+(n*U).toFixed(1)+'px'+(n?'':';visibility:hidden')+'"></span>';
+ host.innerHTML='<div class="days">'
+  +'<p class="days-lede">한 해 동안 <b>'+sum+'</b>번 무언가를 만났다. 가장 빽빽했던 달은 <b>'+(top+1)+'월</b>, '+max+'번. 아무것도 없던 달은 '+empty+'개.</p>'
+  +'<div class="mbars">'+bk.map((n,i)=>'<span class="mcol">'+bar(n,'bk')+bar(mv[i],'mv')+bar(dm[i],'dr')+'</span>').join('')+'</div>'
+  +'<div class="maxis">'+tot.map((n,i)=>'<span class="mlab">'+(i+1)+'<b>'+(n||'')+'</b></span>').join('')+'</div>'
+  +'<p class="days-key">꽉 찬 막대는 책, 테두리 막대는 영화, 연한 막대는 그 달에 보고 있던 드라마 · 숫자는 그 달의 합계</p></div>';
+}
+
+// ── 드라마 타임라인 ──────────────────────────────────────────────
+const PLATFORM={"넷플릭스":'--netflix',"티빙":'--tving',"웨이브":'--wavve',"Disney+":'--disneyplus',"쿠팡플레이":'--coupangplay',"애플TV":'--appletv'};
+const PLATFORM_MARK={
+ "넷플릭스":{ch:'N',bg:'#FFFFFF',fg:'#E50914',bd:'#E50914',barFg:'rgba(255,255,255,.95)'},
+ "티빙":{ch:'T',bg:'#FF6B00',fg:'#1F2226',bd:'#FF6B00',barFg:'rgba(31,34,38,.82)'},
+ "웨이브":{ch:'W',bg:'#1F8FFF',fg:'#FFFFFF',bd:'#1F8FFF',barFg:'rgba(255,255,255,.95)'},
+ "Disney+":{ch:'D',bg:'#0F3EBE',fg:'#FFFFFF',bd:'#0F3EBE',barFg:'rgba(255,255,255,.95)'},
+ "쿠팡플레이":{ch:'C',bg:'#FF3D75',fg:'#FFFFFF',bd:'#FF3D75',barFg:'rgba(255,255,255,.95)'},
+ "애플TV":{ch:'A',bg:'#1D1D1F',fg:'#FFFFFF',bd:'#1D1D1F',barFg:'rgba(255,255,255,.95)'}};
+const SEASONS=[['겨울',1,2],['봄',3,5],['여름',6,8],['가을',9,11],['겨울',12,12]];
+function makeDrama(hostId,year){
+ const wrap=document.getElementById(hostId);
+ const list=DRAMAS.filter(d=>d[1]===year||d[3]===year);
+ if(!list.length){wrap.innerHTML='<p class="blank">기록 없음</p>';return;}
+ let DF=null;
+ const legend=document.createElement('div'); legend.className='legend';
+ const chart=document.createElement('div');
+ chart.innerHTML='<div class="tl-seasons">'+SEASONS.map(([n,a,b])=>'<span style="grid-column:'+a+'/'+(b+1)+'">'+n+'</span>').join('')
+  +'</div><div class="tl-months">'+Array.from({length:12},(_,i)=>'<span>'+(i+1)+'</span>').join('')+'</div>';
+ const rows=document.createElement('div'); rows.className='tl-rows';
+ list.map(d=>{const s=(d[1]===year?d[2]:1),e=(d[3]===year?d[4]:12);
+  // 막대는 최대 2칸 — 3개월 이상이면 종료월 기준으로 뒤 2칸만 그린다
+  return {title:d[0],platform:d[5],wiki:d[6],start:Math.max(s,e-1),end:e,realStart:s};})
+  .sort((a,b)=>a.start-b.start||a.end-b.end||a.title.localeCompare(b.title,'ko'))
+  .forEach(o=>{
+   const period=o.realStart===o.end?o.end+'월':o.realStart+'~'+o.end+'월';
+   const mk=PLATFORM_MARK[o.platform]||{ch:'?',barFg:'#fff'};
+   const right=(12-o.end)>=4||o.start<2;
+   const label=right?'<span class="tl-label rt" style="grid-column:'+(o.end+1)+'/13">'+o.title+'</span>'
+                    :'<span class="tl-label lf" style="grid-column:1/'+o.start+'">'+o.title+'</span>';
+   const a=document.createElement('a'); a.className='tl-row'; a.href=o.wiki; a.target='_blank'; a.rel='noopener';
+   a.dataset.platform=o.platform; a.title=o.title+' \u00b7 '+o.platform+' \u00b7 '+year+'년 '+period;
+   a.innerHTML='<span class="tl-bar" style="grid-column:'+o.start+'/'+(o.end+1)+';background:'+V(PLATFORM[o.platform])+';color:'+mk.barFg+'">'+mk.ch+'</span>'+label;
+   rows.appendChild(a);});
+ chart.appendChild(rows);
+ const hint=document.createElement('p'); hint.className='hint';
+ hint.textContent='막대 길이 = 본 기간. 한 줄을 누르면 작품 페이지로 이동합니다.';
+ wrap.append(legend,chart,hint);
+ const plats=[...new Set(list.map(d=>d[5]))].sort((a,b)=>list.filter(d=>d[5]===b).length-list.filter(d=>d[5]===a).length);
+ function badge(p){const m=PLATFORM_MARK[p];
+  return m?'<span class="pb" style="background:'+m.bg+';color:'+m.fg+';box-shadow:inset 0 0 0 1px '+m.bd+'">'+m.ch+'</span>'
+          :'<span class="sw" style="background:'+V(PLATFORM[p])+'"></span>';}
+ function draw(){
+  legend.className='legend'+(DF?' filtered':'');
+  legend.innerHTML=plats.map(p=>'<button class="lg" type="button" data-k="'+esc(p)+'" aria-pressed="'+(DF===p)+'">'+badge(p)+p+' '+list.filter(d=>d[5]===p).length+'</button>').join('');
+  legend.querySelectorAll('button.lg').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();
+   DF=(DF===b.dataset.k)?null:b.dataset.k; draw(); dim();}));}
+ function dim(){rows.querySelectorAll('a.tl-row').forEach(el=>{el.style.opacity=(DF&&DF!==el.dataset.platform)?'.22':'1';});}
+ draw(); dim();
+}
+
+makeShelf('shelf2026',2026); makeStats('stats2026',2026,'y2026sum'); makeDays('days2026',2026); makeDrama('drama2026',2026);
+makeShelf('shelf2025',2025); makeStats('stats2025',2025,'y2025sum'); makeDays('days2025',2025); makeDrama('drama2025',2025);
+
+// ── 겹쳐진 이름들 ────────────────────────────────────────────────
+const THREADS_DEF=[
+ {name:'프로젝트 헤일메리',test:it=>/헤일메리|Hail Mary/i.test(it.title)},
+ {name:'샐린저',test:it=>/샐린저/.test(it.title)||/샐린저/.test(it.author||'')||/Salinger|Rebel in the Rye|Royal Tenenbaums/i.test(it.original||'')},
+ {name:'스파이더맨',test:it=>/스파이더맨/.test(it.title)},
+ {name:'오디세이아',test:it=>/오디세이/.test(it.title)},
+ {name:'위키드',test:it=>/위키드/.test(it.title)}
+];
+const THREAD_TOP=5;
+// year를 주면 그 해에 만난 것만 대상으로 (만난 날들 그래프와 같은 기준)
+function makeThreads(hostId,keyId,year){
+ const wrap=document.getElementById(hostId);
+ if(!wrap)return;
+ const pool=ALL.filter(x=>+x.date.slice(0,4)===year);
+ const books=pool.filter(x=>x.type==='book'), movies=pool.filter(x=>x.type==='movie');
+ const beadColor=it=>it.type==='book'?(FORMAT[it.format]?V(FORMAT[it.format]):'#BFBBB2')
+                                     :(THEATER[it.theaterType]?V(THEATER[it.theaterType]):'#BFBBB2');
+ const used=new Set(),rows=[];
+ THREADS_DEF.forEach(d=>{const items=pool.filter(it=>d.test(it));
+  if(items.length<2)return; items.forEach(it=>used.add(it.i)); rows.push({name:d.name,items});});
+ const byA={}; books.forEach(b=>{if(used.has(b.i))return;(byA[b.author]=byA[b.author]||[]).push(b);});
+ Object.entries(byA).filter(([,v])=>v.length>1).forEach(([a,v])=>{v.forEach(it=>used.add(it.i));rows.push({name:a,items:v});});
+ const byT={}; movies.forEach(m=>{if(used.has(m.i))return;(byT[m.title]=byT[m.title]||[]).push(m);});
+ Object.entries(byT).filter(([,v])=>v.length>1).forEach(([t,v])=>rows.push({name:t,items:v}));
+ rows.sort((a,b)=>b.items.length-a.items.length||a.name.localeCompare(b.name,'ko'));
+ const cut=rows.length>THREAD_TOP?rows[THREAD_TOP-1].items.length:0;
+ const shown=rows.filter((r,i)=>i<THREAD_TOP||r.items.length===cut);
+ const q=s=>'\u300c'+s+'\u300d';
+ function describe(r){
+  const bs=r.items.filter(x=>x.type==='book'), ms=r.items.filter(x=>x.type==='movie'), parts=[];
+  if(bs.length){const ts=[...new Set(bs.map(b=>b.title))];
+   parts.push('책 '+(ts.length<=3?ts.map(q).join(' · '):ts.slice(0,2).map(q).join(' · ')+' 외 '+(ts.length-2)+'권'));}
+  if(ms.length){const c={}; ms.forEach(m=>c[m.title]=(c[m.title]||0)+1);
+   const sp=ms.filter(m=>m.theaterType==='특').length, ott=ms.filter(m=>m.theaterType==='OTT').length;
+   const seg=Object.entries(c).map(([t,n])=>q(t)+(n>1?' <b>'+n+'회차</b>':''));
+   let tail=''; if(sp&&!ott)tail=' — 전부 특별관'; else if(ott&&!sp)tail=' — 전부 OTT'; else if(sp&&ott)tail=' — 특별관 '+sp+'회 · OTT '+ott+'편';
+   parts.push('영화 '+(seg.length<=4?seg.join(' · '):seg.slice(0,3).join(' · ')+' 외 '+(seg.length-3)+'편')+tail);}
+  return parts.join('<br>');}
+ if(!shown.length){wrap.innerHTML='<p class="blank">그해엔 겹쳐진 이름이 없었다.</p>';
+  document.getElementById(keyId).innerHTML='';return;}
+ wrap.innerHTML=shown.map((r,idx)=>{
+  const op=Math.max(.62,1-idx*.06).toFixed(2), bs=Math.max(9,14-idx);
+  const beads=r.items.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(it=>
+   '<span class="bead'+(it.type==='movie'?' mv':'')+'" style="background:'+beadColor(it)+'" title="'+esc(it.date+' \u00b7 '+it.title)+'"></span>').join('');
+  return '<div class="thread" style="opacity:'+op+';--bs:'+bs+'px"><div class="th-name">'+r.name+'</div>'
+   +'<div class="th-line">'+beads+'</div><div class="th-count">'+r.items.length+'<em>번</em></div>'
+   +'<div class="th-desc">'+describe(r)+'</div></div>';}).join('');
+ const chip=(cls,c)=>'<span class="bead '+cls+'" style="--bs:10px;background:'+c+';display:inline-block;vertical-align:-1px"></span>';
+ document.getElementById(keyId).innerHTML=
+  chip('',V('--paperbook'))+chip('',V('--ebook'))+'<span>책(종이·전자)</span>'
+  +chip('mv',V('--special'))+chip('mv',V('--normal'))+chip('mv',V('--ott'))+'<span>영화(특별관·일반관·OTT)</span>'
+  +'<span>\u00b7 만난 순서대로</span>';
+}
+makeThreads('threads2026','key2026',2026);
+makeThreads('threads2025','key2025',2025);
+
+// ── 웹툰·웹소설·만화책 ───────────────────────────────────────────
+const WEBSTUFF=[
+ ['데뷔 못 하면 죽는 병 걸림','웹툰','https://page.kakao.com/content/59782511/'],
+ ['괴담에 떨어져도 출근을 해야 하는구나','웹툰','https://page.kakao.com/content/69229506/'],
+ ['괴담에 떨어져도 출근을 해야 하는구나','웹소설','https://page.kakao.com/content/69229506/'],
+ ['이 집안을 일으켜세우겠습니다!','웹툰','https://page.kakao.com/content/65858726/'],
+ ['유부녀 킬러','웹툰','https://page.kakao.com/content/61641093/'],
+ ['너와 우주를 걷기 위하여','만화책','https://page.kakao.com/content/70058371/'],
+ ['월간 순정 노자키군','만화책','https://page.kakao.com/content/69094659/'],
+ ['스킵과 로퍼','만화책','https://page.kakao.com/content/65463710/'],
+ ['어차피 남일이니까요 ~어느 변호사의 솔직한 업무~','만화책','https://page.kakao.com/content/64308390/']
+];
+const KINDC={'웹툰':'--es','웹소설':'--de','만화책':'--ko'};
+const KAKAO='<svg class="applogo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#FFE300"/><rect x="9" y="9" width="14" height="14" rx="2" fill="#1A1A1A"/></svg>';
+(function(){
+ const ord={'웹툰':0,'웹소설':1,'만화책':2};
+ const list=WEBSTUFF.slice().sort((a,b)=>ord[a[1]]-ord[b[1]]);
+ const cnt={}; WEBSTUFF.forEach(([,k])=>cnt[k]=(cnt[k]||0)+1);
+ document.getElementById('kkHead').innerHTML=KAKAO+'<span>카카오페이지 · '
+  +Object.entries(cnt).sort((a,b)=>ord[a[0]]-ord[b[0]]).map(([k,n])=>k+' '+n).join(' · ')+'</span>';
+ document.getElementById('webMemo').innerHTML=list.map(([t,k,u])=>
+  '<a class="kk" href="'+u+'" target="_blank" rel="noopener" style="--kind:'+V(KINDC[k])+'">'
+  +'<span><span class="kk-t">'+t+'</span><span class="kk-k">'+k+'</span></span></a>').join('');
+})();
+
+</script></body></html>
