@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>국내 출간 후 경과기간과 누적 대출건수 — 독서모임 98권</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#0e1013; color:#eae5da;
+    font-family:'IBM Plex Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.6; padding:40px 20px 64px;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:1060px; margin:0 auto;}
+  header{margin-bottom:40px;}
+  .eyebrow{font-size:12px; font-weight:500; letter-spacing:.04em; color:#a8b0bd; margin-bottom:16px;}
+  h1{font-family:'Noto Serif KR',serif; font-weight:600; font-size:clamp(26px,5vw,38px);
+     line-height:1.26; letter-spacing:-0.02em; margin:0 0 24px; color:#f3efe6; max-width:16em; text-wrap:pretty;}
+  .lead{margin:0 0 8px; font-size:16px; line-height:1.7; color:#cfd5de; max-width:34em; text-wrap:pretty;}
+  .lead b{color:#f3efe6; font-weight:600;}
+  .method{margin:0; font-size:13.5px; line-height:1.7; color:#a8b0bd; max-width:36em; text-wrap:pretty;}
+
+  .filters{display:grid; gap:16px; margin-bottom:24px;}
+  .fgroup{display:grid; gap:8px;}
+  .fhead{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+  .fhead .primary{font-size:13.5px; font-weight:600; color:#f3efe6;}
+  .fhead .secondary{font-size:13.5px; font-weight:500; color:#b7bfcc;}
+  .fhead .hint{font-size:12px; color:#949cab;}
+  .chiprow{display:flex; flex-wrap:wrap; gap:8px;}
+  button{font-family:inherit; cursor:pointer;}
+  .chip-year{font-size:13.5px; padding:9px 18px; border-radius:999px; border:1px solid #39414d;
+    background:transparent; color:#c3cad5; transition:background .15s,color .15s,border-color .15s; min-height:40px;}
+  .chip-year[aria-pressed="true"]{background:oklch(0.80 0.12 78); border-color:oklch(0.80 0.12 78); color:#1a1407; font-weight:600;}
+  .chip-bin{font-size:12.5px; padding:8px 12px; border-radius:5px; border:1px solid #2f343e;
+    background:transparent; color:#a8b0bd; transition:background .15s,color .15s,border-color .15s; min-height:36px;}
+  .chip-bin[aria-pressed="true"]{background:#2f3744; border-color:#6b7684; color:#f3efe6;}
+  @media (hover:hover){
+    .chip-year:hover{border-color:#e2b566;}
+    .chip-bin:hover{border-color:#8e96a5;}
+  }
+
+  .panel{background:#14181f; border-radius:12px; padding:20px 20px 8px;}
+  .legend{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:center; font-size:12px; color:#b7bfcc; margin-bottom:12px;}
+  .legend span{display:inline-flex; align-items:center; gap:7px;}
+  .sw-ko{width:11px; height:11px; border-radius:50%; background:oklch(0.78 0.14 140);}
+  .sw-tr{width:10px; height:10px; background:oklch(0.71 0.14 268); transform:rotate(45deg);}
+  .sw-new{width:8px; height:8px; border-radius:50%; background:#5b6473; border:1.6px solid #f4ecdd;}
+  .scroller{overflow-x:auto; overflow-y:hidden; margin:0 -4px; -webkit-overflow-scrolling:touch;}
+  svg#chart{width:100%; min-width:700px; height:auto; display:block; overflow:visible;}
+  [data-dot]:focus{outline:2px solid #f4ecdd; outline-offset:2px;}
+  .swipe-note{display:none; font-size:11.5px; color:#7f8796; margin:6px 2px 0;}
+  @media (max-width:760px){ .swipe-note{display:block;} }
+
+  .listwrap{margin-top:40px;}
+  .listhead{display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:8px;}
+  .listhead .label{font-size:13.5px; font-weight:500; color:#b7bfcc;}
+  .listhead .count{font-family:'IBM Plex Mono',monospace; font-size:12px; color:#949cab; font-variant-numeric:tabular-nums;}
+  .empty{margin:0; font-size:13.5px; color:#949cab; padding:16px 2px; border-top:1px solid #22262e;}
+  ol.books{list-style:none; margin:0; padding:0; display:grid; gap:1px; background:#22262e; border-radius:8px; overflow:hidden;}
+  ol.books li{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; background:#14181f; padding:12px 16px;}
+  .rank{font-family:'IBM Plex Mono',monospace; color:#949cab; font-size:12px; width:22px; flex:none; font-variant-numeric:tabular-nums;}
+  .btitle{font-family:'Noto Serif KR',serif; font-weight:500; font-size:13.5px; color:#f3efe6;
+    flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .bauthor{font-size:12px; color:#a8b0bd; flex:0 1 38%; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .bloans{font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums; font-size:12.5px;
+    font-weight:500; color:#eae5da; flex:none; width:74px; text-align:right;}
+  @media (max-width:560px){
+    .btitle{flex:1 1 100%;}
+    .bauthor{flex:1 1 auto; padding-left:36px;}
+  }
+
+  footer{margin-top:40px; padding-top:24px; border-top:1px solid #22262e;
+    display:grid; gap:24px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); max-width:760px;}
+  footer section{display:grid; gap:6px; max-width:32em;}
+  footer h2{margin:0; font-size:12px; font-weight:600; color:#b7bfcc;}
+  footer p{margin:0; font-size:12px; line-height:1.7; color:#949cab;}
+
+  #tooltip{position:fixed; display:none; background:#090b0e; border:1px solid #2f3540; border-radius:8px;
+    padding:12px 14px; font-size:12.5px; color:#eae5da; max-width:280px; pointer-events:none; z-index:20;
+    box-shadow:0 12px 32px rgba(0,0,0,.55);}
+  #tooltip .t-title{font-family:'Noto Serif KR',serif; font-weight:600; font-size:14.5px; color:#f6f2ea; margin-bottom:5px;}
+  #tooltip .t-meta{color:#b7bfcc; font-size:12px;}
+  #tooltip .t-num{font-family:'IBM Plex Mono',monospace; color:#e2e7ee; font-size:12px; margin-top:4px;}
+  #tooltip .t-sel{color:#949cab; font-size:12px;}
+  #tooltip .t-tag{display:inline-block; margin-top:8px; padding:2px 9px; border-radius:999px; font-size:11px;
+    background:#3a2f16; color:oklch(0.80 0.12 78);}
+  #tooltip .t-close{margin-top:8px; font-size:11px; color:#7f8796; display:none;}
+  @media (max-width:560px){
+    #tooltip{left:12px !important; right:12px; top:auto !important; bottom:12px; max-width:none;}
+    #tooltip .t-close{display:block;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">독서모임 · 98권 · 기준 2026년 9월</div>
+    <h1>국내 출간 후 경과기간과<br>누적 대출건수</h1>
+    <p class="lead">경과기간은 대출건수를 거의 설명하지 못한다. 이 그림의 내용은 <b>세로 방향 흩어짐 그 자체</b>다.</p>
+    <p class="method">독서모임에서 읽은 113권 중 98권. 두 축 모두 로그 스케일이며, 기준 시점은 2026년 9월이다.</p>
+  </header>
+
+  <div class="filters">
+    <div class="fgroup">
+      <div class="fhead"><span class="primary">선정 연도</span><span class="hint">눌러서 하이라이트 · 다중 선택</span></div>
+      <div class="chiprow" id="yearRow"></div>
+    </div>
+    <div class="fgroup">
+      <div class="fhead"><span class="secondary">경과기간 구간</span><span class="hint">연도와 AND 조건 · 선택 시 라벨은 해당 범위 상위 5권</span></div>
+      <div class="chiprow" id="binRow"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="legend">
+      <span><span class="sw-ko"></span>한국어 원작 (원형)</span>
+      <span><span class="sw-tr"></span>번역서 (마름모)</span>
+      <span><span class="sw-new"></span>출간 1년 이내 (밝은 테두리)</span>
+    </div>
+    <div class="scroller">
+      <svg id="chart" viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet" role="img"
+        aria-label="98권의 국내 출간 후 경과기간과 누적 대출건수 산점도"></svg>
+    </div>
+    <p class="swipe-note">차트는 좌우로 스크롤할 수 있습니다. 점을 누르면 상세가 나옵니다.</p>
+  </div>
+
+  <div class="listwrap">
+    <div class="listhead"><span class="label">대여순 목록</span><span class="count" id="listCount">98권 전체</span></div>
+    <p class="empty" id="listEmpty">시기를 선택하면 해당 시기 책을 대여건수 순으로 여기 나열합니다.</p>
+    <ol class="books" id="bookList" style="display:none;"></ol>
+  </div>
+
+  <footer>
+    <section>
+      <h2>데이터 기준</h2>
+      <p>대출건수는 정보나루 누적값(2026.09.14 조회). 판본은 엑셀에 기록된 ISBN 1건만 사용 — 구판·신판 대출을 합치지 않음. 빈 값은 0이 아니라 데이터 없음(N/A)이며, 이 차트의 98권은 모두 값이 있는 책입니다.</p>
+    </section>
+    <section>
+      <h2>왼쪽 "0–2년" 압축 칼럼</h2>
+      <p>실제 경과기간에 비례하지 않는 압축 표시입니다 — 국내 출간 1~2년 안팎의 5권(그녀를 지키다·경험의 멸종·말뚝들·카프네·달걀의 온기)이 서로 붙어 보이지 않도록 가로로 펼쳐 놓았을 뿐, 대출건수(세로축)는 그대로입니다.</p>
+    </section>
+    <section>
+      <h2>제외 15권</h2>
+      <p>맥베스 + 젊은 베르테르의 슬픔·파우스트 1·파우스트 2·폭풍의 언덕·이반 일리치의 죽음·마음·싯다르타·이방인·설국·모두가 나의 아들·페스트·침묵의 봄·8월은 악마의 달·반쪼가리 자작 (모두 원작 출간~국내출간 격차 55년 이상 · 다판본 고전으로 특정 어려움).</p>
+    </section>
+  </footer>
+</div>
+
+<div id="tooltip" role="status"></div>
+
+<script>
+const BOOKS = [{"year":2026,"title":"그녀를 지키다","author":"장바티스트 앙드레아","isbn":"9788932924984","lang":"프랑스어","isKorean":false,"loans":11059,"elapsed":1.2,"recent":false,"compressed":true,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"축복받은 집","author":"줌파 라히리","isbn":"9788960901704","lang":"영어","isKorean":false,"loans":9583,"elapsed":13.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"옐로페이스","author":"R.F. 쿠앙","isbn":"9788970125749","lang":"영어","isKorean":false,"loans":6986,"elapsed":2.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"어떤 동사의 멸종","author":"한승태","isbn":"9788959408450","lang":"한국어","isKorean":true,"loans":7059,"elapsed":2.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"두 사람의 인터내셔널","author":"김기태","isbn":"9788954697941","lang":"한국어","isKorean":true,"loans":37299,"elapsed":2.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"순수의 시대","author":"이디스 워튼","isbn":"9788937461835","lang":"영어","isKorean":false,"loans":11358,"elapsed":18.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"불안","author":"알랭 드 보통","isbn":"9788956605593","lang":"영어","isKorean":false,"loans":48673,"elapsed":14.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"꾸뻬 씨의 행복 여행","author":"프랑수아 를로르","isbn":"9788995501443","lang":"프랑스어","isKorean":false,"loans":54773,"elapsed":22.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"수족관","author":"유래혁","isbn":"9791198547514","lang":"한국어","isKorean":true,"loans":4280,"elapsed":3.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"종이 동물원","author":"켄 리우","isbn":"9791158884680","lang":"영어","isKorean":false,"loans":29255,"elapsed":8.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"파격의 고전","author":"이진경","isbn":"9788967353049","lang":"한국어","isKorean":true,"loans":3040,"elapsed":10.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"패싱","author":"넬라 라슨","isbn":"9788937444579","lang":"영어","isKorean":false,"loans":3304,"elapsed":5.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · ISBN 구판으로 수정 (기존 9788937464935)"},{"year":2026,"title":"내가 틀릴 수도 있습니다","author":"비욘 나티코 린데블라드","isbn":"9791130689890","lang":"스웨덴어","isKorean":false,"loans":51012,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"달걀의 온기","author":"김혜진","isbn":"9788936439934","lang":"한국어","isKorean":true,"loans":3264,"elapsed":0.2,"recent":true,"compressed":true,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · 출간 1년 이내"},{"year":2026,"title":"편의점 인간","author":"무라타 사야카","isbn":"9788952235268","lang":"일본어","isKorean":false,"loans":55057,"elapsed":10.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"체호프 단편선","author":"안톤 체호프","isbn":"9788937460708","lang":"러시아어","isKorean":false,"loans":14333,"elapsed":24.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"여자아이 기억","author":"아니 에르노","isbn":"9791191861167","lang":"프랑스어","isKorean":false,"loans":3108,"elapsed":4.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2026,"title":"카프네","author":"아베 아키코","isbn":"9791167376237","lang":"일본어","isKorean":false,"loans":4639,"elapsed":0.2,"recent":true,"compressed":true,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · 출간 1년 이내"},{"year":2025,"title":"소년이 온다","author":"한강","isbn":"9788936434120","lang":"한국어","isKorean":true,"loans":256856,"elapsed":12.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · 값 확인 완료 (한강 2024 노벨문학상 영향)"},{"year":2025,"title":"카타리나 블룸의 잃어버린 명예","author":"하인리히 뵐","isbn":"9788937461804","lang":"독일어","isKorean":false,"loans":19385,"elapsed":18.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"모순","author":"양귀자","isbn":"9788998441012","lang":"한국어","isKorean":true,"loans":110947,"elapsed":13.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"역사의 쓸모","author":"최태성","isbn":"9791193401200","lang":"한국어","isKorean":true,"loans":3056,"elapsed":2.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"눈먼 자들의 도시","author":"주제 사라마구","isbn":"9788973374939","lang":"포르투갈어","isKorean":false,"loans":55374,"elapsed":24.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"아내를 모자로 착각한 남자","author":"올리버 색스","isbn":"9791159920257","lang":"영어","isKorean":false,"loans":31688,"elapsed":10.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"네루다의 우편배달부","author":"안토니오 스카르메타","isbn":"9788937461040","lang":"스페인어","isKorean":false,"loans":14394,"elapsed":22.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"무의식은 어떻게 나를 설계하는가","author":"데이비드 이글먼","isbn":"9788925574394","lang":"영어","isKorean":false,"loans":11186,"elapsed":2.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"당신 인생의 이야기","author":"테드 창","isbn":"9788956057842","lang":"영어","isKorean":false,"loans":42927,"elapsed":10.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"구르브 연락 없다","author":"에두아르도 멘도사","isbn":"9788937462900","lang":"스페인어","isKorean":false,"loans":7622,"elapsed":14.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"새의 선물","author":"은희경","isbn":"9788954687041","lang":"한국어","isKorean":true,"loans":15767,"elapsed":4.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"나를 보내지 마","author":"가즈오 이시구로","isbn":"9788937490033","lang":"영어","isKorean":false,"loans":25891,"elapsed":17.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · ISBN 2009년판으로 수정 (기존 9788937444371, 4,858건)"},{"year":2025,"title":"공감하는 유전자","author":"요아힘 바우어","isbn":"9791164844210","lang":"독일어","isKorean":false,"loans":4400,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"파리대왕","author":"윌리엄 골딩","isbn":"9788937460197","lang":"영어","isKorean":false,"loans":27797,"elapsed":27.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"경험의 멸종","author":"크리스틴 로젠","isbn":"9791167742063","lang":"영어","isKorean":false,"loans":16513,"elapsed":1.2,"recent":false,"compressed":true,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"소망 없는 불행","author":"페터 한트케","isbn":"9788937460654","lang":"독일어","isKorean":false,"loans":8157,"elapsed":24.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"우리가 빛의 속도로 갈 수 없다면","author":"김초엽","isbn":"9791190090018","lang":"한국어","isKorean":true,"loans":126428,"elapsed":7.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"넥서스","author":"유발 하라리","isbn":"9791194330424","lang":"영어","isKorean":false,"loans":27116,"elapsed":2.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2025,"title":"말뚝들","author":"김홍","isbn":"9791172133061","lang":"한국어","isKorean":true,"loans":13735,"elapsed":1.2,"recent":false,"compressed":true,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"모스크바의 신사","author":"에이모 토울스","isbn":"9788972758945","lang":"영어","isKorean":false,"loans":33666,"elapsed":8.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"펜타닐","author":"벤 웨스트호프","isbn":"9791189895112","lang":"영어","isKorean":false,"loans":2291,"elapsed":3.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"최재천의 공부","author":"최재천","isbn":"9788934943457","lang":"한국어","isKorean":true,"loans":32980,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14) · ISBN 구판으로 수정 (기존 9791173321405)"},{"year":2024,"title":"도파민네이션","author":"애나 렘키","isbn":"9788965965046","lang":"영어","isKorean":false,"loans":40713,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"하얼빈","author":"김훈","isbn":"9788954699914","lang":"한국어","isKorean":true,"loans":65790,"elapsed":4.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"파친코","author":"이민진","isbn":"9791168340510","lang":"영어","isKorean":false,"loans":55608,"elapsed":4.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"인생의 허무를 어떻게 할 것인가","author":"김영민","isbn":"9791167070791","lang":"한국어","isKorean":true,"loans":16445,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"당신도 느리게 나이 들 수 있습니다","author":"정희원","isbn":"9791140702589","lang":"한국어","isKorean":true,"loans":30964,"elapsed":3.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"문과 남자의 과학 공부","author":"유시민","isbn":"9791192836188","lang":"한국어","isKorean":true,"loans":36683,"elapsed":3.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"맡겨진 소녀","author":"클레어 키건","isbn":"9791130698199","lang":"영어","isKorean":false,"loans":54005,"elapsed":3.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"방랑자들","author":"올가 토카르추크","isbn":"9788937463990","lang":"폴란드어","isKorean":false,"loans":1393,"elapsed":4.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"이처럼 사소한 것들","author":"클레어 키건","isbn":"9791130646381","lang":"영어","isKorean":false,"loans":64190,"elapsed":3.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"가녀장의 시대","author":"이슬아","isbn":"9791198744456","lang":"한국어","isKorean":true,"loans":1182,"elapsed":2.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"달콤 쌉싸름한 초콜릿","author":"라우라 에스키벨","isbn":"9788937461088","lang":"스페인어","isKorean":false,"loans":25117,"elapsed":22.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"남아 있는 나날","author":"가즈오 이시구로","isbn":"9788937463884","lang":"영어","isKorean":false,"loans":5398,"elapsed":5.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"저주토끼","author":"정보라","isbn":"9791168340947","lang":"한국어","isKorean":true,"loans":13397,"elapsed":3.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · 제목 교보문고 표기로 수정 (기존 저주 토끼)"},{"year":2024,"title":"시대예보: 핵개인의 시대","author":"송길영","isbn":"9791170610359","lang":"한국어","isKorean":true,"loans":31253,"elapsed":3.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14) · 제목 교보문고 표기로 수정 (기존 시대 예보 : 핵개인의 시대)"},{"year":2024,"title":"친애하는 슐츠 씨","author":"박상현","isbn":"9791167741523","lang":"한국어","isKorean":true,"loans":6311,"elapsed":2.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14) · 제목 교보문고 표기로 수정 (기존 친애하는 슐츠씨)"},{"year":2024,"title":"샤이닝","author":"욘 포세","isbn":"9788954698436","lang":"노르웨이어","isKorean":false,"loans":7043,"elapsed":2.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"사라진 것들","author":"앤드루 포터","isbn":"9788954697354","lang":"영어","isKorean":false,"loans":19492,"elapsed":2.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2024,"title":"올리브 키터리지","author":"엘리자베스 스트라우트","isbn":"9788954611152","lang":"영어","isKorean":false,"loans":17990,"elapsed":16.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · 제목 교보문고 표기로 수정 (기존 올리브 키트리지)"},{"year":2023,"title":"시선으로부터,","author":"정세랑","isbn":"9788954672214","lang":"한국어","isKorean":true,"loans":114255,"elapsed":6.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"여덟 단어","author":"박웅현","isbn":"9791197977046","lang":"한국어","isKorean":true,"loans":5629,"elapsed":3.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"자기만의 방","author":"버지니아 울프","isbn":"9788937429040","lang":"영어","isKorean":false,"loans":4904,"elapsed":10.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"챗GPT에게 묻는 인류의 미래","author":"김대식","isbn":"9788962624847","lang":"한국어","isKorean":true,"loans":7668,"elapsed":3.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14) · 제목 교보문고 표기로 수정 (기존 챗GPT에게 물어보는 인류의 미래)"},{"year":2023,"title":"트러스트","author":"에르난 디아스","isbn":"9788954691673","lang":"영어","isKorean":false,"loans":25543,"elapsed":3.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"너무 시끄러운 고독","author":"보후밀 흐라발","isbn":"9788954641548","lang":"체코어","isKorean":false,"loans":37907,"elapsed":10.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"아버지의 해방일지","author":"정지아","isbn":"9788936438838","lang":"한국어","isKorean":true,"loans":113548,"elapsed":4.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"유럽의 시간을 걷다","author":"최경철","isbn":"9791195677146","lang":"한국어","isKorean":true,"loans":13530,"elapsed":10.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"깊이에의 강요","author":"파트리크 쥐스킨트","isbn":"9788932902777","lang":"독일어","isKorean":false,"loans":8750,"elapsed":26.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"새로운 인생","author":"오르한 파묵","isbn":"9788937461347","lang":"터키어","isKorean":false,"loans":5242,"elapsed":20.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"모든 삶은 흐른다","author":"로랑스 드빌레르","isbn":"9791190299770","lang":"프랑스어","isKorean":false,"loans":27939,"elapsed":3.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14) · 대출건수 동일값 재조회 확인 완료"},{"year":2023,"title":"각각의 계절","author":"권여선","isbn":"9788954692526","lang":"한국어","isKorean":true,"loans":27939,"elapsed":3.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · 대출건수 동일값 재조회 확인 완료"},{"year":2023,"title":"부의 감각","author":"댄 애리얼리","isbn":"9788935212224","lang":"영어","isKorean":false,"loans":39645,"elapsed":8.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"동급생","author":"프레드 울만","isbn":"9788932918143","lang":"영어","isKorean":false,"loans":35552,"elapsed":9.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"피로사회","author":"한병철","isbn":"9788932022888","lang":"독일어","isKorean":false,"loans":36964,"elapsed":14.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"원씽","author":"게리 켈러","isbn":"9788997575169","lang":"영어","isKorean":false,"loans":77786,"elapsed":13.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"고래","author":"천명관","isbn":"9788982819278","lang":"한국어","isKorean":true,"loans":69248,"elapsed":22.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"포스트트루스","author":"리 매킨타이어","isbn":"9791188719020","lang":"영어","isKorean":false,"loans":4915,"elapsed":7.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14) · 제목 교보문고 표기로 수정 (기존 포스트 트루스)"},{"year":2023,"title":"밝은 밤","author":"최은영","isbn":"9788954681179","lang":"한국어","isKorean":true,"loans":123445,"elapsed":5.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2023,"title":"다섯째 아이","author":"도리스 레싱","isbn":"9788937460272","lang":"영어","isKorean":false,"loans":23811,"elapsed":27.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"금주 다이어리","author":"클레어 풀리","isbn":"9791191114171","lang":"영어","isKorean":false,"loans":5994,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"가재가 노래하는 곳","author":"델리아 오언스","isbn":"9788952240569","lang":"영어","isKorean":false,"loans":88726,"elapsed":7.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"거꾸로 읽는 세계사","author":"유시민","isbn":"9791191438406","lang":"한국어","isKorean":true,"loans":41069,"elapsed":5.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"스토너","author":"존 윌리엄스","isbn":"9788925554990","lang":"영어","isKorean":false,"loans":64906,"elapsed":11.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"광화문에서 읽다 거닐다 느끼다","author":"광화문글판 문안선정위원회","isbn":"9791159099953","lang":"한국어","isKorean":true,"loans":1128,"elapsed":6.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14) · MD 범위밖 목록"},{"year":2022,"title":"물고기는 존재하지 않는다","author":"룰루 밀러","isbn":"9791189327156","lang":"영어","isKorean":false,"loans":96983,"elapsed":5.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"이어령의 마지막 수업","author":"이어령","isbn":"9791170400523","lang":"한국어","isKorean":true,"loans":56008,"elapsed":5.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"앨저넌에게 꽃을","author":"대니얼 키스","isbn":"9788960305762","lang":"영어","isKorean":false,"loans":2794,"elapsed":5.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"긴긴밤","author":"루리","isbn":"9788954677158","lang":"한국어","isKorean":true,"loans":155838,"elapsed":5.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"인플레이션에서 살아남기","author":"오건영","isbn":"9791190977661","lang":"한국어","isKorean":true,"loans":23649,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"멋진 신세계","author":"올더스 헉슬리","isbn":"9788973814725","lang":"영어","isKorean":false,"loans":44447,"elapsed":11.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"돌 씹어 먹는 아이","author":"송미경","isbn":"9788954626583","lang":"한국어","isKorean":true,"loans":37078,"elapsed":12.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · MD 범위밖 목록"},{"year":2022,"title":"블링크","author":"말콤 글래드웰","isbn":"9788934990802","lang":"영어","isKorean":false,"loans":2884,"elapsed":6.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"무엇이 예술인가","author":"아서 단토","isbn":"9788956608754","lang":"영어","isKorean":false,"loans":3257,"elapsed":11.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"H마트에서 울다","author":"미셸 자우너","isbn":"9788954683371","lang":"영어","isKorean":false,"loans":52283,"elapsed":4.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"소크라테스 익스프레스","author":"에릭 와이너","isbn":"9791190030922","lang":"영어","isKorean":false,"loans":54389,"elapsed":5.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"아몬드","author":"손원평","isbn":"9791198363503","lang":"한국어","isKorean":true,"loans":11818,"elapsed":3.2,"recent":false,"compressed":false,"genre":"문학","note":"정보나루 페이지 복사 (2026.09.14) · MD 범위밖 목록"},{"year":2022,"title":"아무튼, 클래식","author":"김호경","isbn":"9791188605187","lang":"한국어","isKorean":true,"loans":5976,"elapsed":5.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2022,"title":"뼛속까지 내려가서 써라","author":"나탈리 골드버그","isbn":"9788956993409","lang":"영어","isKorean":false,"loans":4612,"elapsed":6.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"},{"year":2021,"title":"공정하다는 착각","author":"마이클 샌델","isbn":"9791164136452","lang":"영어","isKorean":false,"loans":73597,"elapsed":6.2,"recent":false,"compressed":false,"genre":"논픽션","note":"정보나루 페이지 복사 (2026.09.14)"}];
+
+const BG='#0e1013', PANEL='#14181f', GRID='#222833';
+const INK='#f3efe6', DIM='#a8b0bd', SOFT='#949cab';
+const AMBER='oklch(0.80 0.12 78)', KO='oklch(0.78 0.14 140)', TR='oklch(0.71 0.14 268)', RING='#f4ecdd';
+const SANS="'IBM Plex Sans KR',sans-serif", MONO="'IBM Plex Mono',monospace", SERIF="'Noto Serif KR',serif";
+
+const PERIODS=[
+  {key:'2021-2022', label:'2021–2022', years:[2021,2022]},
+  {key:'2023', label:'2023', years:[2023]},
+  {key:'2024', label:'2024', years:[2024]},
+  {key:'2025', label:'2025', years:[2025]},
+  {key:'2026', label:'2026', years:[2026]},
+];
+const XBINS=[
+  {key:'0-2', label:'0–2년', min:0, max:2},
+  {key:'2-3', label:'2–3년', min:2, max:3},
+  {key:'3-5', label:'3–5년', min:3, max:5},
+  {key:'5-10', label:'5–10년', min:5, max:10},
+  {key:'10-20', label:'10–20년', min:10, max:20},
+  {key:'20-30', label:'20–30년', min:20, max:30},
+];
+const periodOf = y => PERIODS.find(p => p.years.includes(y)).key;
+const xbinOf = e => XBINS.find(x => e >= x.min && e < (x.key==='20-30' ? Infinity : x.max)).key;
+BOOKS.forEach(b => { b.period = periodOf(b.year); b.xbin = xbinOf(b.elapsed); });
+
+const active = new Set(), activeX = new Set();
+const matchesFilters = b => (active.size===0 || active.has(b.period)) && (activeX.size===0 || activeX.has(b.xbin));
+const anySelection = () => active.size>0 || activeX.size>0;
+
+const W=900, H=560, M={top:30,right:30,bottom:60,left:74};
+const plotW=W-M.left-M.right, plotH=H-M.top-M.bottom;
+const yTicks=[1000,3000,10000,30000,100000,300000], yMin=900, yMax=300000;
+const colW=92, colGap=24, mainX0=M.left+colW+colGap, mainW=plotW-colW-colGap;
+const xTicksMain=[2,3,5,10,20], xMainMin=2, xMainMax=30;
+
+const compressedTitles = BOOKS.filter(b=>b.compressed)
+  .sort((a,b)=> a.elapsed-b.elapsed || a.loans-b.loans).map(b=>b.title);
+function colPix(title){
+  const i=compressedTitles.indexOf(title), n=compressedTitles.length, inset=16;
+  return M.left + inset + (colW - inset*2) * (n<=1 ? 0.5 : i/(n-1));
+}
+function xForValue(e){
+  if(e<2){ const inset=16; return M.left + inset + (colW-inset*2) * (Math.max(0,e)/2); }
+  const t=(Math.log10(e)-Math.log10(xMainMin))/(Math.log10(xMainMax)-Math.log10(xMainMin));
+  return mainX0 + t*mainW;
+}
+const xPix = b => b.compressed ? colPix(b.title) : xForValue(b.elapsed);
+function yPix(loans){
+  const t=(Math.log10(loans)-Math.log10(yMin))/(Math.log10(yMax)-Math.log10(yMin));
+  return M.top + (1-t)*plotH;
+}
+
+const SVGNS='http://www.w3.org/2000/svg';
+function el(tag, attrs, parent){
+  const e=document.createElementNS(SVGNS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  if(parent) parent.appendChild(e);
+  return e;
+}
+const fmtLoans = n => n>=10000 ? Math.round(n/1000)+'k' : n.toLocaleString();
+const diamond = (cx,cy,r) => 'M'+cx+','+(cy-r)+'L'+(cx+r)+','+cy+'L'+cx+','+(cy+r)+'L'+(cx-r)+','+cy+'Z';
+
+const svg=document.getElementById('chart');
+
+function drawAxes(){
+  const defs=el('defs',{},svg);
+  const f=el('filter',{id:'dcGlow',x:'-50%',y:'-50%',width:'200%',height:'200%'},defs);
+  el('feGaussianBlur',{stdDeviation:3.2},f);
+  el('rect',{x:M.left,y:M.top,width:colW,height:plotH,fill:'#1b1f27'},svg);
+  const dx=M.left+colW+colGap/2;
+  el('line',{x1:dx,y1:M.top,x2:dx,y2:M.top+plotH,stroke:'#3f4854','stroke-width':1,'stroke-dasharray':'2,5'},svg);
+  el('text',{x:M.left+colW/2,y:M.top+plotH+20,'text-anchor':'middle',fill:DIM,'font-size':11,'font-family':SANS},svg).textContent='0–2년 합산';
+  el('text',{x:M.left+colW/2,y:M.top-11,'text-anchor':'middle',fill:SOFT,'font-size':11,'font-family':SANS},svg).textContent='압축 표시';
+  xTicksMain.forEach(v=>{
+    const x=xForValue(v);
+    el('line',{class:'g',x1:x,y1:M.top,x2:x,y2:M.top+plotH,stroke:GRID,'stroke-width':1},svg);
+    el('text',{x,y:M.top+plotH+20,'text-anchor':'middle',fill:DIM,'font-size':11,'font-family':SANS},svg).textContent=v+'년';
+  });
+  yTicks.forEach(v=>{
+    const y=yPix(v);
+    el('line',{x1:M.left,y1:y,x2:M.left+plotW,y2:y,stroke:GRID,'stroke-width':1},svg);
+    el('text',{x:M.left-12,y:y+3.5,'text-anchor':'end',fill:DIM,'font-size':11,'font-family':MONO,'font-variant-numeric':'tabular-nums'},svg).textContent=fmtLoans(v);
+  });
+  el('line',{x1:M.left,y1:M.top+plotH,x2:M.left+plotW,y2:M.top+plotH,stroke:'#3f4854','stroke-width':1},svg);
+  el('line',{x1:M.left,y1:M.top,x2:M.left,y2:M.top+plotH,stroke:'#3f4854','stroke-width':1},svg);
+  el('text',{x:M.left+plotW/2,y:H-12,'text-anchor':'middle',fill:DIM,'font-size':11.5,'font-family':SANS},svg)
+    .textContent='국내 출간 후 경과기간 (2년 이상 로그, 0–2년은 압축 · 2026년 9월 기준)';
+  el('text',{x:0,y:0,'text-anchor':'middle',fill:DIM,'font-size':11.5,'font-family':SANS,
+    transform:'translate(20, '+(M.top+plotH/2)+') rotate(-90)'},svg)
+    .textContent='누적 대출건수 (로그, 정보나루)';
+}
+
+function drawBands(){
+  XBINS.filter(x=>activeX.has(x.key)).forEach(bin=>{
+    const [x1,x2] = bin.key==='0-2' ? [M.left, M.left+colW] : [xForValue(bin.min), xForValue(bin.max)];
+    el('rect',{x:Math.min(x1,x2),y:M.top,width:Math.abs(x2-x1),height:plotH,fill:AMBER,opacity:0.09},svg);
+    el('line',{x1:Math.min(x1,x2),y1:M.top,x2:Math.min(x1,x2),y2:M.top+plotH,stroke:AMBER,'stroke-width':1,opacity:.3},svg);
+  });
+}
+
+function topLabelSet(){
+  const pool = anySelection() ? BOOKS.filter(matchesFilters) : BOOKS;
+  return new Set([...pool].sort((a,b)=>b.loans-a.loans).slice(0,5).map(b=>b.title));
+}
+
+function placeLabels(items, labelLayer, leaderLayer){
+  const boxes=[];
+  const cands=[[9,-8],[9,13],[-9,-8],[-9,13],[9,-24],[9,29],[-9,-24],[-9,29],[9,-40],[9,45],[-9,-40],[-9,45]];
+  const overlaps=(a,b)=> !(a.x+a.w+4<b.x || b.x+b.w+4<a.x || a.y+a.h+2<b.y || b.y+b.h+2<a.y);
+  items.sort((a,b)=>b.b.loans-a.b.loans).forEach(({b,cx,cy})=>{
+    const t=el('text',{fill:INK,'font-family':SERIF,'font-size':12,'font-weight':500,
+      stroke:PANEL,'stroke-width':3.6,'paint-order':'stroke','stroke-linejoin':'round',
+      style:'pointer-events:none'},labelLayer);
+    t.textContent=b.title;
+    const w=t.getComputedTextLength() || b.title.length*12, h=13;
+    let chosen=null;
+    for(let i=0;i<cands.length;i++){
+      const [ox,oy]=cands[i];
+      const x = ox>0 ? cx+ox : cx+ox-w;
+      const box={x, y: cy+oy-h+3, w, h};
+      if(box.x < M.left+2 || box.x+box.w > W-M.right) continue;
+      if(box.y < 6 || box.y+box.h > M.top+plotH+6) continue;
+      if(boxes.some(o=>overlaps(box,o))) continue;
+      chosen={ox, oy, anchor: ox>0?'start':'end', box};
+      break;
+    }
+    if(!chosen) chosen={ox:9, oy:-8, anchor:'start', box:{x:cx+9, y:cy-8-h+3, w, h}};
+    boxes.push(chosen.box);
+    t.setAttribute('x', cx+chosen.ox);
+    t.setAttribute('y', cy+chosen.oy);
+    t.setAttribute('text-anchor', chosen.anchor);
+    if(Math.abs(chosen.oy) > 16){
+      const endX = chosen.ox>0 ? cx+chosen.ox-3 : cx+chosen.ox+3;
+      const endY = chosen.oy<0 ? cy+chosen.oy+4 : cy+chosen.oy-9;
+      el('path',{d:'M'+cx+','+cy+' L'+cx+','+endY+' L'+endX+','+endY,
+        fill:'none', stroke:'#6b7684','stroke-width':1}, leaderLayer);
+    }
+  });
+}
+
+function draw(){
+  svg.innerHTML='';
+  drawAxes();
+  drawBands();
+  const leaders=el('g',{},svg);
+  const glow=el('g',{filter:'url(#dcGlow)',opacity:0.5},svg);
+  const points=el('g',{},svg);
+  const labels=el('g',{},svg);
+  const topLabels=topLabelSet();
+  const sel=anySelection();
+  const labelled=[];
+  BOOKS.forEach(b=>{
+    const on = !sel || matchesFilters(b);
+    const cx=xPix(b), cy=yPix(b.loans), r = on ? 4.6 : 3.4;
+    if(on){
+      const ga={fill: b.isKorean?KO:TR, opacity: Math.min(1, 0.25 + b.loans/120000)};
+      if(b.isKorean) el('circle', Object.assign({cx,cy,r:r*1.5}, ga), glow);
+      else el('path', Object.assign({d:diamond(cx,cy,r*1.8)}, ga), glow);
+    }
+    const common={
+      fill: b.isKorean?KO:TR,
+      opacity: sel ? (on?1:0.16) : 0.9,
+      stroke: b.recent?RING:BG,
+      'stroke-width': b.recent?1.6:0.9,
+      tabindex:0, 'data-dot':'1',
+      'aria-label': b.title+' · 대출 '+b.loans.toLocaleString()+'건 · 출간 후 '+b.elapsed.toFixed(1)+'년',
+      style:'cursor:pointer'
+    };
+    const node = b.isKorean
+      ? el('circle', Object.assign({cx,cy,r}, common), points)
+      : el('path', Object.assign({d:diamond(cx,cy,r*1.18)}, common), points);
+    node.addEventListener('mouseenter', e=>showTip(e,b));
+    node.addEventListener('mousemove', moveTip);
+    node.addEventListener('mouseleave', hideTip);
+    node.addEventListener('focus', ()=>showTipAt(node,b));
+    node.addEventListener('blur', hideTip);
+    node.addEventListener('click', e=>{ e.stopPropagation(); showTip(e,b); });
+    if(topLabels.has(b.title)) labelled.push({b,cx,cy});
+  });
+  placeLabels(labelled, labels, leaders);
+}
+
+const tip=document.getElementById('tooltip');
+function tipHTML(b){
+  return '<div class="t-title">'+b.title+'</div>'+
+    '<div class="t-meta">'+b.author+' · '+b.lang+(b.isKorean?' · 한국어 원작':' · 번역서')+'</div>'+
+    '<div class="t-num">대출 '+b.loans.toLocaleString()+'건 · 출간 후 '+b.elapsed.toFixed(1)+'년</div>'+
+    '<div class="t-sel">'+b.year+'년 모임 선정 ('+b.period+')</div>'+
+    (b.recent?'<span class="t-tag">출간 1년 이내</span>':'')+
+    '<div class="t-close">화면 아무 곳을 누르면 닫힙니다</div>';
+}
+function showTip(evt,b){ tip.innerHTML=tipHTML(b); tip.style.display='block'; moveTip(evt); }
+function showTipAt(node,b){
+  tip.innerHTML=tipHTML(b); tip.style.display='block';
+  const r=node.getBoundingClientRect();
+  moveTip({clientX:r.left+r.width/2, clientY:r.bottom});
+}
+function moveTip(evt){
+  if(typeof evt.clientX !== 'number') return;
+  const pad=14;
+  let x=evt.clientX+pad, y=evt.clientY+pad;
+  if(x+290 > window.innerWidth) x=evt.clientX-290-pad;
+  if(y+150 > window.innerHeight) y=evt.clientY-150-pad;
+  tip.style.left=x+'px';
+  tip.style.top=Math.max(8,y)+'px';
+}
+function hideTip(){ tip.style.display='none'; }
+document.body.addEventListener('click', hideTip);
+
+const listCountEl=document.getElementById('listCount');
+const listEmpty=document.getElementById('listEmpty');
+const bookList=document.getElementById('bookList');
+function renderList(){
+  const sel=anySelection();
+  listCountEl.textContent = sel ? BOOKS.filter(matchesFilters).length+' / 98' : '98권 전체';
+  if(!sel){
+    listEmpty.style.display='block';
+    listEmpty.textContent='시기를 선택하면 해당 시기 책을 대여건수 순으로 여기 나열합니다.';
+    bookList.style.display='none'; bookList.innerHTML='';
+    return;
+  }
+  const rows=BOOKS.filter(matchesFilters).sort((a,b)=>b.loans-a.loans);
+  if(rows.length===0){
+    listEmpty.style.display='block';
+    listEmpty.textContent='선택한 조합에 해당하는 책이 없습니다.';
+    bookList.style.display='none'; bookList.innerHTML='';
+    return;
+  }
+  listEmpty.style.display='none';
+  bookList.style.display='grid';
+  bookList.innerHTML = rows.map((b,i)=>
+    '<li><span class="rank">'+(i+1)+'</span><span class="btitle">'+b.title+'</span>'+
+    '<span class="bauthor">'+b.author+'</span><span class="bloans">'+b.loans.toLocaleString()+'건</span></li>'
+  ).join('');
+}
+
+const yearRow=document.getElementById('yearRow');
+PERIODS.forEach(p=>{
+  const btn=document.createElement('button');
+  btn.type='button'; btn.className='chip-year'; btn.textContent=p.label;
+  btn.setAttribute('aria-pressed','false');
+  btn.addEventListener('click', e=>{
+    e.stopPropagation();
+    const on = active.has(p.key);
+    if(on) active.delete(p.key); else active.add(p.key);
+    btn.setAttribute('aria-pressed', on?'false':'true');
+    draw(); renderList();
+  });
+  yearRow.appendChild(btn);
+});
+const binRow=document.getElementById('binRow');
+XBINS.forEach(x=>{
+  const btn=document.createElement('button');
+  btn.type='button'; btn.className='chip-bin'; btn.textContent=x.label;
+  btn.setAttribute('aria-pressed','false');
+  btn.addEventListener('click', e=>{
+    e.stopPropagation();
+    const on = activeX.has(x.key);
+    if(on) activeX.delete(x.key); else activeX.add(x.key);
+    btn.setAttribute('aria-pressed', on?'false':'true');
+    draw(); renderList();
+  });
+  binRow.appendChild(btn);
+});
+
+draw();
+renderList();
+</script>
+</body>
+</html>
