@@ -62,6 +62,11 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ysum{display:flex;justify-content:space-between;align-items:baseline;padding:16px 20px 4px}
 .ysum .y{font-family:var(--serif);font-weight:700;font-size:20px}.ysum .s{font-size:12px;color:var(--soft)}
 .ysum.one{padding:10px 20px 2px}
+.ysum .save{font-size:12px;color:var(--ink);text-decoration:none;border:1px solid var(--rule);border-radius:999px;padding:4px 10px;background:var(--card)}
+.ysum.one{align-items:center}
+.imgs{padding-bottom:12px}.imgs p{font-size:14px;font-weight:500}.imgs p span{display:block;font-size:12px;color:var(--soft);font-weight:400;margin-top:2px}
+.imgs div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.more .imgs a.yi{display:inline-block;border:1px solid var(--rule);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:500;color:var(--ink)}
+.more .imgs+a{border-top:1px solid var(--rule);padding-top:11px}
 .ysub{padding:12px 20px 2px;font-size:12px;font-weight:600;color:var(--soft);letter-spacing:.04em}
 .row{display:flex;align-items:flex-end;gap:14px;width:100%;text-align:left;padding:12px 20px;border-bottom:1px solid var(--rule)}
 .row:active{background:rgba(0,0,0,.03)}
@@ -193,6 +198,7 @@ const MERGE={2021:2022};
 const gk=y=>MERGE[y]||y;
 const GKEYS=[...new Set(YEARS.map(gk))];
 const gyears=k=>YEARS.filter(y=>gk(y)===k).sort((a,b)=>a-b);
+const imgLink=(k,c,t)=>{const r=B.filter(b=>gk(b.year)===k),f=glab(k).replace('–','-');return '<a class="'+c+'" href="lists/'+f+'.png?v='+r.length+'-'+r[r.length-1].date+'" download="금요일독서모임_'+f+'.png" target="_blank" rel="noopener">'+t+'</a>';};
 const glab=k=>{const ys=gyears(k);return ys.length>1?ys[0]+'–'+String(ys[ys.length-1]).slice(2):String(k);};
 const md=d=>{const[m,x]=d.split('.');return (+m)+'.'+(+x)};
 const fmt=n=>n.toLocaleString('ko-KR');
@@ -236,7 +242,7 @@ function list(){
  $('list').innerHTML=GKEYS.filter(k=>hit.some(b=>gk(b.year)===k)).map(y=>{
   const r=hit.filter(b=>gk(b.year)===y).reverse(),yr=B.filter(b=>gk(b.year)===y);
   const s=all?r.length+'권':yr.length+'권 · '+fmt(yr.reduce((a,b)=>a+b.pages,0))+'쪽'+(y===CUR?' · 진행 중':'');
-  return (all?'<div class="ysum"><span class="y">'+glab(y)+'</span><span class="s">'+s+'</span></div>':'<div class="ysum one"><span class="s">'+s+'</span></div>')+(gyears(y).length>1?gyears(y).slice().reverse().filter(x=>r.some(b=>b.year===x)).map(x=>'<p class="ysub">'+x+'</p>'+r.filter(b=>b.year===x).map(row).join('')).join(''):r.map(row).join(''));
+  return (all?'<div class="ysum"><span class="y">'+glab(y)+'</span><span class="s">'+s+'</span></div>':'<div class="ysum one"><span class="s">'+s+'</span>'+imgLink(y,'save','이미지로 저장')+'</div>')+(gyears(y).length>1?gyears(y).slice().reverse().filter(x=>r.some(b=>b.year===x)).map(x=>'<p class="ysub">'+x+'</p>'+r.filter(b=>b.year===x).map(row).join('')).join(''):r.map(row).join(''));
  }).join('');
 }
 function render(){chips();tabs();list();}
@@ -313,7 +319,7 @@ function stats(){
   +'<section class="cd"><h3>문학 · 논픽션<span>연도별 문학 권수</span></h3><div class="gl">'+G2.slice().reverse().map(g=>{const r=inG(g),l=r.filter(b=>b.genre==='문학').length;return '<span class="yr">'+gl(g)+'</span><span class="bar"><i style="width:'+(l/r.length*100)+'%"></i></span><span class="n">'+l+'/'+r.length+'</span><span class="n">'+Math.round(l/r.length*100)+'%</span>';}).join('')+'</div></section>'
   +'<section class="cd"><h3>세부 장르</h3><div class="hb">'+se.map(([k,n])=>'<span>'+k+'</span><span class="t"><i style="width:'+(n/smx*100)+'%"></i></span><span class="n">'+n+'</span>').join('')+'</div></section>'
   +'<section class="cd"><h3>두 번 이상 읽은 작가<span>'+rep.length+'명</span></h3>'+rep.map(a=>'<div class="au2">'+esc(a)+'<span>'+[...new Set(A[a].map(x=>work(x.title)))].map(esc).join(', ')+'</span></div>').join('')+'</section>'
-  +'<section class="cd more"><h3>함께 보기</h3><a href="Dante.html">신곡 길잡이<span>지옥 · 연옥 · 천국편과 신곡 속 성경</span></a><a href="star.html">출간 후 기간과 누적 대출건수<span>98권 · 2026년 9월 기준</span></a><a href="archive.html">예전 기록 페이지<span>서가·차트·해설 (2026년 11월까지 메인)</span></a></section>';
+  +'<section class="cd more"><h3>함께 보기</h3><div class="imgs"><p>연도별 목록 이미지<span>폰에 저장하기 좋은 세로 이미지</span></p><div>'+GKEYS.map(k=>imgLink(k,'yi',glab(k))).join('')+'</div></div><a href="Dante.html">신곡 길잡이<span>지옥 · 연옥 · 천국편과 신곡 속 성경</span></a><a href="star.html">출간 후 기간과 누적 대출건수<span>98권 · 2026년 9월 기준</span></a><a href="archive.html">예전 기록 페이지<span>서가·차트·해설 (2026년 11월까지 메인)</span></a></section>';
 }
 
 /* ---------- 탭 전환 ---------- */
