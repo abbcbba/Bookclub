@@ -120,6 +120,7 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .links a:only-child{grid-column:1/-1}
 .guide{display:block;margin-top:18px;padding:14px 16px;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:600;font-size:15px;text-decoration:none}
 .guide+.links{margin-top:8px}
+.kdc{margin-top:12px;font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums}.kdc span{margin-left:4px;color:var(--faint)}
 .more a{display:block;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink);text-decoration:none;font-size:14px;font-weight:500}
 .more a:first-of-type{border:0;padding-top:0}
 .more a span{display:block;font-size:12px;color:var(--soft);font-weight:400;margin-top:2px}
@@ -180,6 +181,7 @@ const col=l=>V(LANG[l]||'--etc');
 const grp=l=>LANG[l]?l:'기타';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const G=(typeof GUIDES!=='undefined')?GUIDES:{};
+const KDC=['총류','철학','종교','사회과학','자연과학','기술과학','예술','언어','문학','역사'];
 const B=D.map((r,i)=>({i,year:r[0],date:r[1],title:r[2],author:r[3],pages:r[4],lang:r[5],pub:r[6],genre:r[7],nobel:r[8],fem:r[9],ny:r[10],sub:r[11],kdc:r[12],press:r[13]||'',isbn:r[14]||''}))
   .sort((a,b)=>a.year-b.year||a.date.localeCompare(b.date));
 const YEARS=[...new Set(B.map(b=>b.year))].sort((a,b)=>b-a);
@@ -258,6 +260,7 @@ function openSheet(b,from){
   +'<div class="kv"><div>원작<b>'+b.pub+'년 · '+esc(b.lang)+'</b></div><div>분량<b>'+b.pages+'쪽</b></div>'
   +'<div>장르<b>'+esc(b.sub)+'</b></div>'
   +(b.nobel?'<div class="hl">노벨문학상<b>'+b.ny+'년 수상</b></div>':'<div>분류<b>'+esc(b.genre)+'</b></div>')+'</div>'
+  +(b.kdc!=null?'<p class="kdc">도서관 분류 · KDC '+b.kdc+' <span>'+KDC[Math.floor(b.kdc/100)]+'</span></p>':'')
   +(same.length?'<p class="same">같은 작가 · '+same.map(x=>'<button type="button" data-i="'+x.i+'">'+esc(x.title)+'</button> ('+x.year+'. '+md(x.date)+')').join(', ')+'</p>':'')
   +(G[b.title]?'<a class="guide" href="'+G[b.title][0]+'">'+esc(G[b.title][1])+' 보기 →</a>':'')+'<div class="links"><a class="k" href="https://search.kyobobook.co.kr/search?keyword='+kq+'" target="_blank" rel="noopener">교보문고에서 보기</a>'
   +(b.isbn?'<a class="a" href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN='+b.isbn+'" target="_blank" rel="noopener">알라딘 책 정보</a>':'')+'</div>';
