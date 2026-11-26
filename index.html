@@ -14,11 +14,12 @@
 <meta name="theme-color" content="#F1EFEA">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{--paper:#F1EFEA;--card:#FFFFFF;--ink:#1F2226;--soft:#6C6A63;--faint:#A9A49A;--rule:#E0DDD6;--on:#A03A34;
 --en:#A03A34;--ko:#1F4D45;--de:#6B5B95;--fr:#C1902F;--ja:#7D9A4F;--es:#C4603D;--ru:#2F5D8C;--etc:#8A7A69;
---serif:"Gowun Batang",serif;--sans:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,sans-serif;
+--serif:"Gowun Batang",serif;--sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;
 --safe:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -57,7 +58,7 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .row .mid{flex:1;min-width:0;align-self:center}
 .row .ti{font-weight:500;font-size:15.5px;line-height:1.35}
 .row .au{font-size:13px;color:var(--soft);margin-top:2px}
-.row .pg{flex:none;width:40px;text-align:right;font-size:11px;color:var(--soft);font-variant-numeric:tabular-nums}
+.row .nbt{color:var(--on)}
 .spn{flex:none;width:14px;border-radius:2px 2px 0 0;position:relative}
 .spn:after{content:"";position:absolute;left:0;right:0;top:6px;height:2px;background:#fff;opacity:.4}
 .nb{display:inline-block;font-size:10.5px;font-weight:400;color:var(--on);border:1px solid var(--on);border-radius:4px;padding:0 4px;margin-left:6px;vertical-align:2px;white-space:nowrap}
@@ -104,6 +105,11 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .links a{display:block;text-align:center;padding:13px 8px;border-radius:12px;font-size:14px;font-weight:500;text-decoration:none}
 .links .k{background:var(--ink);color:#fff}.links .a{border:1px solid var(--rule);color:var(--ink)}
 .links a:only-child{grid-column:1/-1}
+.guide{display:block;margin-top:18px;padding:14px 16px;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:600;font-size:15px;text-decoration:none}
+.guide+.links{margin-top:8px}
+.more a{display:block;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink);text-decoration:none;font-size:14px;font-weight:500}
+.more a:first-of-type{border:0;padding-top:0}
+.more a span{display:block;font-size:12px;color:var(--soft);font-weight:400;margin-top:2px}
 .sheet .cls{position:absolute;right:14px;top:12px;width:32px;height:32px;border-radius:50%;font-size:20px;color:var(--soft)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -144,6 +150,7 @@ const V=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim()
 const col=l=>V(LANG[l]||'--etc');
 const grp=l=>LANG[l]?l:'기타';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const G=(typeof GUIDES!=='undefined')?GUIDES:{};
 const B=D.map((r,i)=>({i,year:r[0],date:r[1],title:r[2],author:r[3],pages:r[4],lang:r[5],pub:r[6],genre:r[7],nobel:r[8],fem:r[9],ny:r[10],sub:r[11],kdc:r[12],press:r[13]||'',isbn:r[14]||''}))
   .sort((a,b)=>a.year-b.year||a.date.localeCompare(b.date));
 const YEARS=[...new Set(B.map(b=>b.year))].sort((a,b)=>b-a);
@@ -179,7 +186,7 @@ function tabs(){
   +YEARS.map(y=>'<button class="tab" type="button" role="tab" data-y="'+y+'" aria-selected="'+(!all&&st.year===y)+'">'+y+'</button>').join('');
 }
 function row(b){
- return '<button class="row" type="button" data-i="'+b.i+'"><span class="dt">'+md(b.date)+'</span><span class="mid"><span class="ti">'+esc(b.title)+(b.nobel?'<span class="nb">노벨상</span>':'')+'</span><span class="au" style="display:block">'+esc(b.author)+' · '+esc(b.lang)+'</span></span><span class="pg">'+b.pages+'쪽</span><span class="spn" aria-hidden="true" style="height:'+(14+b.pages/PMAX*34).toFixed(1)+'px;background:'+col(b.lang)+'"></span></button>';
+ return '<button class="row" type="button" data-i="'+b.i+'"><span class="dt">'+b.date+'</span><span class="mid"><span class="ti">'+esc(b.title)+'</span><span class="au" style="display:block">'+esc(b.author)+' · '+esc(b.lang)+(b.nobel?' · <span class="nbt">노벨상</span>':'')+'</span></span><span class="spn" aria-hidden="true" style="height:'+(14+b.pages/PMAX*34).toFixed(1)+'px;background:'+col(b.lang)+'"></span></button>';
 }
 function list(){
  const q=norm(st.q),F=FILTERS.find(x=>x.k===st.f);
@@ -222,7 +229,7 @@ function openSheet(b,from){
   +'<div>장르<b>'+esc(b.sub)+'</b></div>'
   +(b.nobel?'<div class="hl">노벨문학상<b>'+b.ny+'년 수상</b></div>':'<div>분류<b>'+esc(b.genre)+'</b></div>')+'</div>'
   +(same.length?'<p class="same">같은 작가 · '+same.map(x=>'<button type="button" data-i="'+x.i+'">'+esc(x.title)+'</button> ('+x.year+'. '+md(x.date)+')').join(', ')+'</p>':'')
-  +'<div class="links"><a class="k" href="https://search.kyobobook.co.kr/search?keyword='+kq+'" target="_blank" rel="noopener">교보문고에서 보기</a>'
+  +(G[b.title]?'<a class="guide" href="'+G[b.title][0]+'">'+esc(G[b.title][1])+' 보기 →</a>':'')+'<div class="links"><a class="k" href="https://search.kyobobook.co.kr/search?keyword='+kq+'" target="_blank" rel="noopener">교보문고에서 보기</a>'
   +(b.isbn?'<a class="a" href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN='+b.isbn+'" target="_blank" rel="noopener">알라딘 책 정보</a>':'')+'</div>';
  document.body.classList.add('open');
  $('sheet').focus({preventScroll:true});
@@ -259,7 +266,7 @@ function stats(){
   +(etc.length?'<p class="key" style="margin-top:6px">기타: '+Object.entries(ec).sort((a,b)=>b[1]-a[1]).map(([k,n])=>k+' '+n).join(' · ')+'</p>':'')+'</section>'
   +'<section class="cd"><h3>세부 장르</h3><div class="hb">'+se.map(([k,n])=>'<span>'+k+'</span><span class="t"><i style="width:'+(n/smx*100)+'%"></i></span><span class="n">'+n+'</span>').join('')+'</div></section>'
   +'<section class="cd"><h3>두 번 이상 읽은 작가<span>'+rep.length+'명</span></h3>'+rep.map(a=>'<div class="au2">'+esc(a)+'<span>'+[...new Set(A[a].map(x=>work(x.title)))].map(esc).join(', ')+'</span></div>').join('')+'</section>'
-  +'<p class="empty" style="padding:20px"><a href="archive.html" style="color:var(--soft)">예전 기록 페이지 보기</a></p>';
+  +'<section class="cd more"><h3>함께 보기</h3><a href="Dante.html">신곡 길잡이<span>지옥 · 연옥 · 천국편과 신곡 속 성경</span></a><a href="star.html">출간 후 기간과 누적 대출건수<span>98권 · 2026년 9월 기준</span></a><a href="archive.html">예전 기록 페이지<span>서가·차트·해설 (2026년 11월까지 메인)</span></a></section>';
 }
 
 /* ---------- 탭 전환 ---------- */
