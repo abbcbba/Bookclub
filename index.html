@@ -73,9 +73,13 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .spn:after{content:"";position:absolute;left:0;right:0;top:6px;height:2px;background:#fff;opacity:.4}
 .empty{padding:48px 20px;text-align:center;color:var(--soft);font-size:14px}
 /* stats */
-.big{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 14px 2px}
-.big div{background:var(--card);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--soft)}
-.big b{display:block;font-family:var(--serif);font-size:24px;color:var(--ink);margin-top:2px}
+.now{margin-top:10px}.now .lb{font-size:12px;color:var(--on);font-weight:600;letter-spacing:.03em}
+.now .nv{display:flex;align-items:baseline;gap:10px;margin-top:4px}.now .nv b{font-family:var(--serif);font-size:30px}.now .nv span{color:var(--soft);font-size:14px}
+.ms{display:flex;align-items:flex-end;gap:3px;height:36px;margin-top:12px;border-bottom:2px solid var(--ink)}.ms i{flex:1;max-width:14px;border-radius:2px 2px 0 0}
+.now .lt{font-size:13px;margin-top:10px}.now .lt span{color:var(--soft);margin-left:4px}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 14px}
+.mini div{background:var(--card);border-radius:12px;padding:10px 12px;font-size:11.5px;color:var(--soft)}
+.mini b{display:block;font-size:18px;font-weight:600;color:var(--ink);margin-top:2px}
 .cd{background:var(--card);border-radius:14px;margin:8px 14px;padding:16px}
 .cd h3{font-size:14px;font-weight:500;margin-bottom:12px}.cd h3 span{color:var(--soft);font-weight:400;font-size:12px;margin-left:6px}
 .yb{display:flex;align-items:flex-end;gap:8px;height:110px}
@@ -127,7 +131,7 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .top{grid-column:1/-1;padding:36px 0 14px}.h{font-size:34px}.sub{font-size:14px}
 #view-list{grid-column:1;min-width:0}
 #view-stats{grid-column:2;display:block!important;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:10px 0 24px;scrollbar-width:thin}
-#view-stats .big,#view-stats .cd{margin-left:0;margin-right:0}#view-stats .big{padding:0 0 2px}
+#view-stats .mini,#view-stats .cd{margin-left:0;margin-right:0}#view-stats .now{margin-top:0}
 .stick .search{margin-left:0;margin-right:0}.tabs{padding-left:0;padding-right:0}.chips{padding-left:0;padding-right:0}.menu{right:0}
 .ysum,.ysum.one{padding-left:4px;padding-right:4px}.row{padding-left:4px;padding-right:4px;border-radius:6px}
 .row:hover{background:rgba(0,0,0,.03)}
@@ -275,21 +279,28 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.class
 /* ---------- 통계 ---------- */
 function stats(){
  const tot=B.length,pg=B.reduce((s,b)=>s+b.pages,0),pf=B.filter(b=>b.fem!==2);
- const ys=YEARS.slice().reverse(),cnt=y=>B.filter(b=>b.year===y).length,mx=Math.max(...ys.map(cnt));
+ /* 첫해(2021, 1권)는 다음 해와 묶어서 그린다 */
+ const MERGE={2021:2022};
+ const G2=YEARS.slice().reverse().filter(y=>!MERGE[y]).map(y=>[y,...YEARS.filter(x=>MERGE[x]===y)].sort());
+ const inG=g=>B.filter(b=>g.includes(b.year));
+ const gl=(g,short)=>g.length>1?(short?String(g[0]).slice(2)+'–'+String(g[g.length-1]).slice(2):g[0]+'–'+String(g[g.length-1]).slice(2)):(short?String(g[0]).slice(2):String(g[0]));
+ const mx=Math.max(...G2.map(g=>inG(g).length));
  const L={};B.forEach(b=>{const k=grp(b.lang);L[k]=(L[k]||0)+1;});const le=Object.entries(L).sort((a,b)=>b[1]-a[1]);
  const S={};B.forEach(b=>S[b.sub]=(S[b.sub]||0)+1);const se=Object.entries(S).sort((a,b)=>b[1]-a[1]),smx=se[0][1];
  const work=t=>t.replace(/\s*\d+$/,'');const A={};B.forEach(b=>(A[b.author]=A[b.author]||[]).push(b));
  const rep=Object.keys(A).filter(a=>new Set(A[a].map(x=>work(x.title))).size>1).sort((a,b)=>a.localeCompare(b,'ko'));
  const etc=B.filter(b=>!LANG[b.lang]),ec={};etc.forEach(b=>ec[b.lang]=(ec[b.lang]||0)+1);
+ const cy=B.filter(b=>b.year===CUR),last=cy[cy.length-1],cmx=Math.max(...cy.map(b=>b.pages));
  $('view-stats').innerHTML=
-  '<div class="big"><div>읽은 책<b>'+tot+'권</b></div><div>읽은 쪽수<b>'+fmt(pg)+'</b></div>'
-  +'<div>원어<b>'+new Set(B.map(b=>b.lang)).size+'개 언어</b></div><div>여성 작가<b>'+Math.round(pf.filter(b=>b.fem===1).length/pf.length*100)+'%</b></div>'
-  +'<div>노벨상 작가<b>'+B.filter(b=>b.nobel).length+'권</b></div><div>권당 평균<b>'+Math.round(pg/tot)+'쪽</b></div></div>'
-  +'<section class="cd"><h3>연도별 권수</h3><div class="yb">'+ys.map(y=>{const n=cnt(y);return '<div class="'+(y===CUR?'cur':'')+'"><em>'+n+'</em><i style="height:'+(n/mx*70)+'px"></i>'+String(y).slice(2)+'</div>';}).join('')+'</div></section>'
-  +'<section class="cd"><h3>문학 · 논픽션<span>연도별 문학 권수</span></h3><div class="gl">'+YEARS.map(y=>{const r=B.filter(b=>b.year===y),l=r.filter(b=>b.genre==='문학').length;return '<span class="yr">'+y+'</span><span class="bar"><i style="width:'+(l/r.length*100)+'%"></i></span><span class="n">'+l+'/'+r.length+'</span><span class="n">'+Math.round(l/r.length*100)+'%</span>';}).join('')+'</div></section>'
+  '<section class="cd now"><p class="lb">'+CUR+' · 진행 중</p><p class="nv"><b>'+cy.length+'권</b><span>'+fmt(cy.reduce((a,b)=>a+b.pages,0))+'쪽</span></p>'
+  +'<div class="ms" aria-hidden="true">'+cy.map(b=>'<i style="height:'+(10+b.pages/cmx*26).toFixed(1)+'px;background:'+col(b.lang)+'"></i>').join('')+'</div>'
+  +'<p class="lt">최근 · '+esc(last.title)+' <span>'+md(last.date)+'</span></p></section>'
   +'<section class="cd"><h3>원어<span>원작이 쓰인 언어</span></h3><div class="rib">'+le.map(([k,n])=>'<i style="width:'+(n/tot*100)+'%;background:'+V(LANG[k]||'--etc')+'"></i>').join('')+'</div>'
   +'<div class="key">'+le.map(([k,n])=>'<span><i style="background:'+V(LANG[k]||'--etc')+'"></i>'+k+' '+n+'</span>').join('')+'</div>'
   +(etc.length?'<p class="key" style="margin-top:6px">기타: '+Object.entries(ec).sort((a,b)=>b[1]-a[1]).map(([k,n])=>k+' '+n).join(' · ')+'</p>':'')+'</section>'
+  +'<div class="mini"><div>여성 작가<b>'+Math.round(pf.filter(b=>b.fem===1).length/pf.length*100)+'%</b></div><div>노벨상 작가<b>'+B.filter(b=>b.nobel).length+'권</b></div><div>권당 평균<b>'+Math.round(pg/tot)+'쪽</b></div></div>'
+  +'<section class="cd"><h3>연도별 권수</h3><div class="yb">'+G2.map(g=>{const n=inG(g).length;return '<div class="'+(g.includes(CUR)?'cur':'')+'"><em>'+n+'</em><i style="height:'+(n/mx*70)+'px"></i>'+gl(g,true)+'</div>';}).join('')+'</div></section>'
+  +'<section class="cd"><h3>문학 · 논픽션<span>연도별 문학 권수</span></h3><div class="gl">'+G2.slice().reverse().map(g=>{const r=inG(g),l=r.filter(b=>b.genre==='문학').length;return '<span class="yr">'+gl(g)+'</span><span class="bar"><i style="width:'+(l/r.length*100)+'%"></i></span><span class="n">'+l+'/'+r.length+'</span><span class="n">'+Math.round(l/r.length*100)+'%</span>';}).join('')+'</div></section>'
   +'<section class="cd"><h3>세부 장르</h3><div class="hb">'+se.map(([k,n])=>'<span>'+k+'</span><span class="t"><i style="width:'+(n/smx*100)+'%"></i></span><span class="n">'+n+'</span>').join('')+'</div></section>'
   +'<section class="cd"><h3>두 번 이상 읽은 작가<span>'+rep.length+'명</span></h3>'+rep.map(a=>'<div class="au2">'+esc(a)+'<span>'+[...new Set(A[a].map(x=>work(x.title)))].map(esc).join(', ')+'</span></div>').join('')+'</section>'
   +'<section class="cd more"><h3>함께 보기</h3><a href="Dante.html">신곡 길잡이<span>지옥 · 연옥 · 천국편과 신곡 속 성경</span></a><a href="star.html">출간 후 기간과 누적 대출건수<span>98권 · 2026년 9월 기준</span></a><a href="archive.html">예전 기록 페이지<span>서가·차트·해설 (2026년 11월까지 메인)</span></a></section>';
