@@ -135,9 +135,12 @@ section:first-of-type{padding-top:20px}
 .barcode i{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.5;transform:translateX(-1px)}
 .bc-axis{position:relative;height:22px;margin:6px 0 18px}
 .bc-axis span{position:absolute;font-size:12px;color:var(--soft)}
+.brand{font-family:"IBM Plex Sans KR",sans-serif;font-size:14px;font-weight:600;letter-spacing:.06em;color:var(--ink);margin:0 0 8px}
+.brand span{color:var(--on);font-weight:500}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style></head><body><div class="wrap">
 <header>
+<p class="brand">독서모임 <span>2021–2027</span></p>
 <p class="kicker" id="date-range">2021년 12월 28일 — 2026년 9월 11일</p>
 <h1>격주 금요일, <span id="h1-total">112</span>권의 기록</h1>
 </header>
@@ -211,7 +214,7 @@ section:first-of-type{padding-top:20px}
 <p class="note">워튼·브론테·울프·라슨·레싱 같은 고전 작가와 한강·최은영·정세랑·권여선·김초엽 같은 동시대 한국 작가가 고르게 섞여 있습니다.</p></section>
 
 <section>
-<div class="sec-head"><h2>두 번 이상 읽은 작가</h2><p>다섯 명이 나란히 두 작품씩. 한 작가를 연달아 파고드는 시기가 있었습니다.</p></div>
+<div class="sec-head"><h2>두 번 이상 읽은 작가</h2><p><span id="rep-lead">다섯 명이 나란히 두 작품씩.</span> 한 작가를 연달아 파고드는 시기가 있었습니다.</p></div>
 <table id="reptable"></table>
 <p class="note">『파우스트』는 1부와 2부를 2023년 6월 9일과 23일에 나눠 읽었습니다. 그해 6–7월은 괴테를 연달아 읽은 가장 밀도 높은 구간이었고, 카뮈도 같은 해 2월에 2주 연속이었습니다. 이 '작가 집중 읽기'는 2024년 클레어 키건을 끝으로 자취를 감췄습니다.</p></section>
 
@@ -455,7 +458,9 @@ document.getElementById('femstack').innerHTML=GRP.map(g=>{
  const m={};B.forEach(b=>{(m[b.author]=m[b.author]||[]).push(b);});
  const work=t=>t.replace(/\s*\d+$/,'');
  const rows=Object.keys(m).filter(a=>new Set(m[a].map(x=>work(x.title))).size>1).sort((a,b)=>a.localeCompare(b,'ko'));
- document.getElementById('reptable').innerHTML='<thead><tr><th style="width:34%">작가</th><th style="width:12%">작품</th><th>제목</th></tr></thead><tbody>'+rows.map(a=>{
+ {const NUMK=['','한','두','세','네','다섯','여섯','일곱','여덟','아홉','열'],k=rows.map(a=>new Set(m[a].map(x=>work(x.title))).size),n=rows.length,nk=n<=10?NUMK[n]+' 명':n+'명';
+ document.getElementById('rep-lead').textContent=k.every(x=>x===k[0])?nk+'이 나란히 '+(NUMK[k[0]]||k[0])+' 작품씩.':nk+'이 두 작품 이상씩.';}
+document.getElementById('reptable').innerHTML='<thead><tr><th style="width:34%">작가</th><th style="width:12%">작품</th><th>제목</th></tr></thead><tbody>'+rows.map(a=>{
   const bs=m[a].slice().sort((x,y)=>x.year-y.year||x.date.localeCompare(y.date));
   const yrs=[...new Set(bs.map(b=>b.year))].join(', ');
   const ws=[...new Set(bs.map(b=>work(b.title)))];
