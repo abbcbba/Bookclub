@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>독서모임 2021–2027</title>
+<title>금요일 독서모임 기록</title>
 <meta name="description" content="격주 금요일, 함께 읽은 책들의 기록">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://abbcbba.github.io/Bookclub/">
@@ -35,9 +35,15 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .search input::placeholder{color:var(--faint)}
 .search .x{width:28px;height:28px;border-radius:50%;color:var(--soft);font-size:18px;line-height:1;display:none}
 .search.has .x{display:block}
-.chips{display:flex;gap:6px;padding:10px 20px 12px;overflow-x:auto;scrollbar-width:none}
+.chips{position:relative;display:flex;flex-wrap:nowrap;gap:5px;padding:10px 16px 12px}
+.chip.dd{display:flex;align-items:center;gap:3px;margin-left:auto}.chip.dd .car{font-size:10px;opacity:.7}
+.menu{position:absolute;right:16px;top:calc(100% - 6px);z-index:15;width:210px;background:var(--card);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.15);padding:6px}
+.menu button{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px;border-radius:8px;font-size:14px;text-align:left}
+.menu button em{font-style:normal;color:var(--soft);font-size:12px}
+.menu button[aria-checked="true"]{background:var(--paper);font-weight:500}
+.menu .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px}
 .chips::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
-.chip{flex:none;border:1px solid var(--rule);background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--soft);white-space:nowrap}
+.chip{flex:none;border:1px solid var(--rule);background:var(--card);border-radius:999px;padding:5px 10px;font-size:13px;color:var(--soft);white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
 .chip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:1px}
 .tabs{position:sticky;top:0;z-index:5;display:flex;gap:2px;padding:8px 16px;overflow-x:auto;scrollbar-width:none;background:var(--paper);border-bottom:1px solid var(--rule)}
@@ -105,8 +111,8 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 <body><div class="wrap">
 
 <header class="top">
-<p class="brand">독서모임 <span>2021–2027</span></p>
-<h1 class="h" id="h">격주 금요일</h1>
+<p class="brand"><span>2021–2027</span></p>
+<h1 class="h" id="h">금요일 독서모임 기록</h1>
 <p class="sub" id="sub"></p>
 </header>
 
@@ -148,8 +154,7 @@ const PMAX=Math.max(...B.map(b=>b.pages));
 const norm=s=>s.toLowerCase().replace(/[\s:·,.『』]/g,'');
 
 const $=id=>document.getElementById(id);
-$('h').textContent='격주 금요일, '+B.length+'권';
-$('sub').textContent=fmt(B.reduce((s,b)=>s+b.pages,0))+'쪽 · '+new Set(B.map(b=>b.lang)).size+'개 언어 · '+B[0].year+'. '+md(B[0].date).replace('.','. ')+'부터';
+$('sub').textContent=B.length+'권 · '+fmt(B.reduce((s,b)=>s+b.pages,0))+'쪽 · '+new Set(B.map(b=>b.lang)).size+'개 언어 · '+B[0].year+'. '+md(B[0].date).replace('.','. ')+'부터';
 
 /* ---------- 목록 ---------- */
 const FILTERS=[
@@ -158,10 +163,15 @@ const FILTERS=[
  {k:'nobel',t:'노벨상',f:b=>b.nobel},
  {k:'fem',t:'여성 작가',f:b=>b.fem===1}];
 const LANGS=Object.keys(LANG).concat('기타');
-let st={year:CUR,q:'',f:null,lang:null};
+let st={year:CUR,q:'',f:null,lang:null},menuOpen=false;
 function chips(){
  $('chips').innerHTML=FILTERS.map(x=>'<button class="chip" type="button" data-f="'+x.k+'" aria-pressed="'+(st.f===x.k)+'">'+x.t+'</button>').join('')
-  +LANGS.map(l=>'<button class="chip" type="button" data-l="'+l+'" aria-pressed="'+(st.lang===l)+'"><span class="dot" style="background:'+V(LANG[l]||'--etc')+'"></span>'+l+'</button>').join('');
+  +'<button class="chip dd" type="button" id="langbtn" aria-haspopup="true" aria-expanded="'+menuOpen+'" aria-pressed="'+!!st.lang+'">'
+  +(st.lang?'<span class="dot" style="background:'+V(LANG[st.lang]||'--etc')+'"></span>'+st.lang:'원어')+'<span class="car" aria-hidden="true">▾</span></button>'
+  +(menuOpen?'<div class="menu" role="menu" aria-label="원어">'
+   +[['',null,B.length]].concat(LANGS.map(l=>[l,l,B.filter(b=>grp(b.lang)===l).length])).map(([t,l,n])=>
+     '<button type="button" role="menuitemradio" data-l="'+(l||'')+'" aria-checked="'+(st.lang===l)+'"><span>'+(l?'<span class="dot" style="background:'+V(LANG[l]||'--etc')+'"></span>'+l:'전체 원어')+'</span><em>'+n+'</em></button>').join('')
+   +'</div>':'');
 }
 function tabs(){
  const all=!!(st.q||st.f||st.lang);
@@ -183,8 +193,15 @@ function list(){
  }).join('');
 }
 function render(){chips();tabs();list();}
-$('chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;
- if(c.dataset.f)st.f=st.f===c.dataset.f?null:c.dataset.f;else st.lang=st.lang===c.dataset.l?null:c.dataset.l;render();});
+$('chips').addEventListener('click',e=>{
+ e.stopPropagation();
+ const m=e.target.closest('.menu button');
+ if(m){st.lang=m.dataset.l||null;menuOpen=false;render();$('langbtn').focus();return;}
+ const c=e.target.closest('.chip');if(!c)return;
+ if(c.id==='langbtn'){menuOpen=!menuOpen;chips();if(menuOpen){const on=document.querySelector('.menu [aria-checked="true"]');(on||document.querySelector('.menu button')).focus();}return;}
+ st.f=st.f===c.dataset.f?null:c.dataset.f;menuOpen=false;render();});
+document.addEventListener('click',e=>{if(menuOpen&&!e.target.closest('#chips')){menuOpen=false;chips();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuOpen){menuOpen=false;chips();$('langbtn').focus();}});
 $('tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(!t)return;
  if(t.dataset.y){st.year=+t.dataset.y;}else{st.q='';st.f=null;st.lang=null;$('q').value='';$('sbox').classList.remove('has');}
  render();window.scrollTo({top:$('tabs').offsetTop,behavior:'smooth'});});
