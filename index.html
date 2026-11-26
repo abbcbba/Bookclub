@@ -128,6 +128,10 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .guide{display:block;margin-top:18px;padding:14px 16px;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:600;font-size:15px;text-decoration:none}
 .guide+.links{margin-top:8px}
 .kdc{margin-top:12px;font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums}.kdc span{margin-left:4px;color:var(--faint)}
+.sheet .cp{font:inherit;color:inherit;text-align:left;padding:0;cursor:copy;-webkit-tap-highlight-color:transparent}
+.sheet .cp:active{opacity:.6}
+#toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));z-index:60;transform:translate(-50%,-12px);opacity:0;pointer-events:none;background:var(--ink);color:#fff;font-size:13px;padding:8px 14px;border-radius:999px;transition:opacity .2s,transform .2s;max-width:calc(100vw - 40px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#toast.on{opacity:1;transform:translate(-50%,0)}
 .kdc .isbn{font-size:12.5px;color:var(--ink);text-decoration:underline dotted;text-underline-offset:3px;font-variant-numeric:tabular-nums;padding:6px 0}
 .more a{display:block;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink);text-decoration:none;font-size:14px;font-weight:500}
 .more a:first-of-type{border:0;padding-top:0}
@@ -275,8 +279,8 @@ function openSheet(b,from){
  const same=B.filter(x=>x.author===b.author&&x!==b);
  const kq=encodeURIComponent(b.title+' '+b.author);
  $('sheet').innerHTML='<div class="grab"></div><button class="cls" type="button" aria-label="닫기">×</button>'
-  +'<p class="d">'+b.year+'. '+md(b.date)+' 모임</p><h2 id="st">'+esc(b.title)+'</h2>'
-  +'<p class="d">'+esc(b.author)+(b.press?' · '+esc(b.press):'')+'</p>'
+  +'<p class="d">'+b.year+'. '+md(b.date)+' 모임</p><h2 id="st"><button type="button" class="cp" data-cp="'+esc(b.title)+'" aria-label="제목 복사">'+esc(b.title)+'</button></h2>'
+  +'<p class="d"><button type="button" class="cp" data-cp="'+esc(b.author)+'" aria-label="저자 복사">'+esc(b.author)+'</button>'+(b.press?' · '+esc(b.press):'')+'</p>'
   +'<div class="kv"><div>원작<b>'+b.pub+'년 · '+esc(b.lang)+'</b></div><div>분량<b>'+b.pages+'쪽</b></div>'
   +'<div>장르<b>'+esc(b.sub)+'</b></div>'
   +(b.nobel?'<div class="hl">노벨문학상<b>'+b.ny+'년 수상</b></div>':'<div>분류<b>'+esc(b.genre)+'</b></div>')+'</div>'
@@ -292,6 +296,8 @@ function closeSheet(){document.body.classList.remove('open');if(lastFocus)lastFo
 $('shade').addEventListener('click',closeSheet);
 $('sheet').addEventListener('click',e=>{
  if(e.target.closest('.cls'))return closeSheet();
+ const cp=e.target.closest('.cp');
+ if(cp){copyText(cp.dataset.cp,()=>toast('복사됨 · '+cp.dataset.cp));return;}
  const ib=e.target.closest('.isbn');
  if(ib){const t=ib.dataset.isbn,done=()=>{ib.textContent='복사됨 ✓';setTimeout(()=>{ib.textContent=t;},1400);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,()=>{});
@@ -299,6 +305,16 @@ $('sheet').addEventListener('click',e=>{
   return;}
  const s=e.target.closest('.same button');if(s)openSheet(B.find(b=>b.i===+s.dataset.i),lastFocus);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('open'))closeSheet();});
+/* 복사: 글자는 그대로 두고 아래에 잠깐 알림 */
+function copyText(t,done){
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,()=>{});
+ else{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();try{document.execCommand('copy');done();}catch(_){}x.remove();}
+}
+function toast(m){
+ let el=document.getElementById('toast');
+ if(!el){el=document.createElement('div');el.id='toast';el.setAttribute('role','status');document.body.appendChild(el);}
+ el.textContent=m;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),1400);
+}
 /* 아래로 끌어 닫기 */
 (function(){let y0=null;const sh=$('sheet');
  sh.addEventListener('touchstart',e=>{y0=sh.scrollTop<=0?e.touches[0].clientY:null;},{passive:true});
