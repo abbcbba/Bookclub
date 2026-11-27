@@ -130,7 +130,7 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .gg{font-weight:600}.gg i{font-style:normal}.gg i:nth-child(1),.gg i:nth-child(4){color:#4285F4}.gg i:nth-child(2),.gg i:nth-child(6){color:#EA4335}.gg i:nth-child(3){color:#FBBC05}.gg i:nth-child(5){color:#34A853}
 .guide{display:block;margin-top:18px;padding:14px 16px;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:600;font-size:15px;text-decoration:none}
 .guide+.links{margin-top:8px}
-.kdc .d4l{display:inline-block;margin-left:8px;padding:2px 9px;border:1px solid var(--rule);border-radius:20px;font-size:12px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.kdc .d4l:first-child{margin-left:0}.kdc .d4l{display:inline-block;margin-left:8px;padding:2px 9px;border:1px solid var(--rule);border-radius:20px;font-size:12px;color:var(--ink);text-decoration:none;white-space:nowrap}
 .kdc{margin-top:12px;font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums}.kdc span{margin-left:4px;color:var(--faint)}
 .sheet .cp{font:inherit;color:inherit;text-align:left;padding:0;cursor:copy;-webkit-tap-highlight-color:transparent}
 .sheet .cp:active{opacity:.6}
@@ -288,7 +288,7 @@ function openSheet(b,from){
   +'<div class="kv"><div>원작<b>'+b.pub+'년 · '+esc(b.lang)+'</b></div><div>분량<b>'+b.pages+'쪽</b></div>'
   +'<div>장르<b>'+esc(b.sub)+'</b></div>'
   +(b.nobel?'<div class="hl">노벨문학상<b>'+b.ny+'년 수상</b></div>':'<div>분류<b>'+esc(b.genre)+'</b></div>')+'</div>'
-  +((b.kdc!=null||b.isbn)?'<p class="kdc">'+(b.kdc!=null?'KDC '+b.kdc+' <span>'+KDC[Math.floor(b.kdc/100)]+'</span>':'')+(b.kdc!=null&&b.isbn?' · ':'')+(b.isbn?'ISBN <button type="button" class="isbn" data-isbn="'+b.isbn+'" aria-label="ISBN 복사">'+b.isbn+'</button><a class="d4l" href="https://data4library.kr/bookL?isbn='+b.isbn+'" target="_blank" rel="noopener">정보나루 ↗</a>':'')+'</p>':'')
+  +'<p class="kdc">'+(b.kdc!=null?'KDC '+b.kdc+' <span>'+KDC[Math.floor(b.kdc/100)]+'</span>':'')+(b.kdc!=null&&b.isbn?' · ':'')+(b.isbn?'ISBN <button type="button" class="isbn" data-isbn="'+b.isbn+'" aria-label="ISBN 복사">'+b.isbn+'</button>':'')+'<a class="d4l" href="https://data4library.kr/bookL?'+(b.isbn?'isbn='+b.isbn:'title='+encodeURIComponent(b.title.replace(/[:·,]/g,' ').replace(/\s+/g,' ').trim()))+'" target="_blank" rel="noopener">정보나루 ↗</a></p>'
   +(same.length?'<p class="same">같은 작가 · '+same.map(x=>'<button type="button" data-i="'+x.i+'">'+esc(x.title)+'</button> ('+x.year+'. '+md(x.date)+')').join(', ')+'</p>':'')
   +(G[b.title]?'<a class="guide" href="'+G[b.title][0]+'">'+esc(G[b.title][1])+' 보기 →</a>':'')+'<a class="ai" href="https://www.google.com/search?udm=50&amp;q='+encodeURIComponent(b.title+' '+(b.isbn||b.author))+'" target="_blank" rel="noopener"><span class="gg"><i>G</i><i>o</i><i>o</i><i>g</i><i>l</i><i>e</i></span> AI 모드로 물어보기 →</a>'
   +'<div class="links"><a class="k" href="https://search.kyobobook.co.kr/search?keyword='+kq+'" target="_blank" rel="noopener">교보문고에서 보기</a>'
