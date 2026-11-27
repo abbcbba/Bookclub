@@ -123,8 +123,7 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
 .links a{display:block;text-align:center;padding:13px 8px;border-radius:12px;font-size:14px;font-weight:500;text-decoration:none}
 .links .k{background:var(--ink);color:#fff}.links .a{border:1px solid var(--rule);color:var(--ink)}
-.links a:only-child{grid-column:1/-1}
-.links .lib{grid-column:1/-1}
+.links a:last-child:nth-child(odd){grid-column:1/-1}
 .guide{display:block;margin-top:18px;padding:14px 16px;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:600;font-size:15px;text-decoration:none}
 .guide+.links{margin-top:8px}
 .kdc{margin-top:12px;font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums}.kdc span{margin-left:4px;color:var(--faint)}
@@ -288,7 +287,8 @@ function openSheet(b,from){
   +(same.length?'<p class="same">같은 작가 · '+same.map(x=>'<button type="button" data-i="'+x.i+'">'+esc(x.title)+'</button> ('+x.year+'. '+md(x.date)+')').join(', ')+'</p>':'')
   +(G[b.title]?'<a class="guide" href="'+G[b.title][0]+'">'+esc(G[b.title][1])+' 보기 →</a>':'')+'<div class="links"><a class="k" href="https://search.kyobobook.co.kr/search?keyword='+kq+'" target="_blank" rel="noopener">교보문고에서 보기</a>'
   +(b.isbn?'<a class="a" href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN='+b.isbn+'" target="_blank" rel="noopener">알라딘 책 정보</a>':'')
-  +'<a class="a lib" href="https://www.snlib.go.kr/intro/plusSearchResultList.do?searchType=SIMPLE&amp;searchCategory=BOOK&amp;searchKey=TITLE&amp;searchKeyword='+encodeURIComponent(b.title.replace(/[:·,]/g,' ').replace(/\s+/g,' ').trim())+'" target="_blank" rel="noopener">성남시 도서관에서 찾기</a></div>';
+  +'<a class="a lib" href="https://www.snlib.go.kr/intro/plusSearchResultList.do?searchType=SIMPLE&amp;searchCategory=BOOK&amp;searchKey=TITLE&amp;searchKeyword='+encodeURIComponent(b.title.replace(/[:·,]/g,' ').replace(/\s+/g,' ').trim())+'" target="_blank" rel="noopener">성남시 도서관에서 찾기</a>'
+  +'<a class="a ai" href="https://www.google.com/search?udm=50&amp;q='+encodeURIComponent(b.title+' '+(b.isbn||b.author))+'" target="_blank" rel="noopener">Google AI 모드</a></div>';
  document.body.classList.add('open');
  $('sheet').focus({preventScroll:true});
 }
